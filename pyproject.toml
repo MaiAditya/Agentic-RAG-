@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "multimodal-pdf-pipeline"
+version = "0.1.0"
+description = "A multimodal PDF analysis pipeline with FastAPI and ChromaDB"
+authors = ["Aditya Gupta <aditya_g@mt.iitr.ac.in>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.104.0"
+uvicorn = "^0.24.0"
+python-multipart = "^0.0.6"
+chromadb = "^0.4.0"
+langchain = "0.1.0"
+langchain-openai = "^0.0.2"
+langchain-core = "^0.1.0"
+pymupdf = "^1.23.0"
+opencv-python = "^4.8.0"
+pillow = "^10.0.0"
+python-dotenv = "^1.0.0"
+pydantic = "^2.0.0"
+openai = "^1.0.0"
+spacy = "^3.7.2"
+transformers = "^4.35.0"
+torch = "^2.1.0"
+pydantic-settings = "^2.0.0"
+pdf2image = "^1.17.0"
+pandas = "^2.2.3"
+sentence-transformers = "^3.3.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.4.0"
+black = "^23.9.1"
+isort = "^5.12.0"
+flake8 = "^6.1.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
