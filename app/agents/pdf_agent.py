@@ -39,18 +39,28 @@ class PDFAgent:
         try:
             # Extract content using the PDF processor
             extracted_content = await self.pdf_processor.process(pdf_content)
+            if not extracted_content:
+                raise ValueError("Failed to extract content from PDF")
+            
+            # Ensure content is properly structured before adding to database
+            processed_content = {
+                "content": extracted_content.get("pages", []),
+                "metadata": extracted_content.get("metadata", {}),
+                "file_size": len(pdf_content)
+            }
             
             # Store in vector database
-            await self.chroma_client.add_documents([extracted_content])
+            await self.chroma_client.add_documents([processed_content])
             
             return {
                 "status": "success",
                 "message": "PDF processed successfully",
-                "metadata": extracted_content.get("metadata", {})
+                "metadata": processed_content["metadata"],
+                "file_size": processed_content["file_size"]
             }
         except Exception as e:
             logger.error(f"Error in process_pdf: {e}")
-            raise
+            raise ValueError(f"Failed to process PDF: {str(e)}")
 
     async def answer_query(self, query: str) -> str:
         """Answer a query using RAG with the ReAct pattern."""
