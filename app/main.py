@@ -56,8 +56,8 @@ app.add_middleware(
 )
 
 # Initialize components
-chroma_client = ChromaDBClient()
 pdf_processor = PDFProcessor()
+chroma_client = ChromaDBClient()
 pdf_agent = PDFAgent(pdf_processor, chroma_client)
 
 @app.post("/process-pdf")

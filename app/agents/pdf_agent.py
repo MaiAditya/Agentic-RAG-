@@ -1,67 +1,76 @@
-from langchain_core.prompts import ChatPromptTemplate
+from typing import Dict, Any, List
 from langchain_openai import ChatOpenAI
-from typing import Dict, Any
-import logging
-import os
-
-# Set tokenizer parallelism
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
-
-logger = logging.getLogger(__name__)
-
-PROMPT_TEMPLATE = """You are an AI assistant helping with questions about a PDF document.
-
-Context from the document:
-{context}
-
-Human Question: {query}
-
-Please provide a clear and concise answer based on the context above. If the context doesn't contain relevant information to answer the question, please say so.
-
-Answer:"""
+from langchain_core.prompts import ChatPromptTemplate
+from .tools.document_tools import DocumentSearchTool, TableSearchTool
+from ..retrieval.hybrid_retriever import HybridRetriever
+from ..retrieval.reranker import Reranker
+from .prompts import REACT_AGENT_PROMPT
 
 class PDFAgent:
     def __init__(self, pdf_processor, chroma_client):
+        # Initialize components
         self.pdf_processor = pdf_processor
         self.chroma_client = chroma_client
+        
+        # Initialize LLM
         self.llm = ChatOpenAI(
             temperature=0,
             model="gpt-3.5-turbo"
         )
-        self.prompt = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
+        
+        # Initialize retrievers and reranker
+        self.retriever = HybridRetriever(chroma_client)
+        self.reranker = Reranker()
+        
+        # Initialize tools
+        self.tools = [
+            DocumentSearchTool(chroma_client),
+            TableSearchTool(chroma_client)
+        ]
+        
+        # Initialize prompts
+        self.react_prompt = ChatPromptTemplate.from_template(REACT_AGENT_PROMPT)
 
     async def process_pdf(self, pdf_content: bytes) -> Dict[str, Any]:
         """Process a PDF file and store its contents."""
         try:
+            # Extract content using the PDF processor
             extracted_content = await self.pdf_processor.process(pdf_content)
+            
+            # Store in vector database
             await self.chroma_client.add_documents([extracted_content])
+            
             return {
                 "status": "success",
-                "message": "PDF processed successfully"
+                "message": "PDF processed successfully",
+                "metadata": extracted_content.get("metadata", {})
             }
         except Exception as e:
             logger.error(f"Error in process_pdf: {e}")
             raise
 
     async def answer_query(self, query: str) -> str:
-        """Answer a query using RAG."""
+        """Answer a query using RAG with the ReAct pattern."""
         try:
-            # Query the vector database with a smaller limit
-            db_results = await self.chroma_client.query(query, limit=3)
+            # Get relevant documents using hybrid retrieval
+            results = await self.retriever.get_relevant_documents(query)
             
-            # Format the context
-            context = self._format_context(db_results)
+            # Rerank results
+            reranked_results = self.reranker.rerank(results, query)
+            
+            # Format context from top results
+            context = self._format_context(reranked_results[:3])
             
             if not context:
-                return "I couldn't find any relevant information in the document to answer your question."
+                return "I couldn't find relevant information to answer your question."
 
-            # Create the prompt with context and query
-            chain = self.prompt | self.llm
-            
-            # Get the response
+            # Execute ReAct chain
+            chain = self.react_prompt | self.llm
             response = await chain.ainvoke({
+                "tools": self._format_tools(),
+                "input": query,
                 "context": context,
-                "query": query
+                "chat_history": ""
             })
             
             return response.content
@@ -70,37 +79,19 @@ class PDFAgent:
             logger.error(f"Error in answer_query: {e}")
             raise
 
-    def _format_context(self, results: Dict[str, Any]) -> str:
-        """Format the search results into a clear context string."""
+    def _format_context(self, results: List[Dict]) -> str:
+        """Format retrieved results into a context string."""
         context_parts = []
-
-        # Process text content
-        if "text" in results and results["text"]["documents"]:
-            text_parts = []
-            for doc, metadata in zip(results["text"]["documents"], results["text"]["metadatas"]):
-                if doc.strip():  # Only include non-empty text
-                    page_num = metadata.get("page_num", "unknown")
-                    text_parts.append(f"[Page {page_num}] {doc.strip()}")
-            if text_parts:
-                context_parts.append("Text Content:\n" + "\n".join(text_parts))
-
-        # Process table content
-        if "tables" in results and results["tables"]["documents"]:
-            table_parts = []
-            for table, metadata in zip(results["tables"]["documents"], results["tables"]["metadatas"]):
-                if table.strip():
-                    page_num = metadata.get("page_num", "unknown")
-                    table_parts.append(f"[Page {page_num}] Table content: {table.strip()}")
-            if table_parts:
-                context_parts.append("\nTable Content:\n" + "\n".join(table_parts))
-
-        # Process image content
-        if "images" in results and results["images"]["documents"]:
-            image_parts = []
-            for img, metadata in zip(results["images"]["documents"], results["images"]["metadatas"]):
-                page_num = metadata.get("page_num", "unknown")
-                image_parts.append(f"[Page {page_num}] {img}")
-            if image_parts:
-                context_parts.append("\nImage References:\n" + "\n".join(image_parts))
-
+        for result in results:
+            content = result.get("content", "")
+            source_type = result.get("type", "text")
+            context_parts.append(f"[{source_type.upper()}]: {content}")
+        
         return "\n\n".join(context_parts)
+
+    def _format_tools(self) -> str:
+        """Format available tools for the prompt."""
+        tool_descriptions = []
+        for tool in self.tools:
+            tool_descriptions.append(f"- {tool.name}: {tool.description}")
+        return "\n".join(tool_descriptions)
