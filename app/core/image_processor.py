@@ -6,12 +6,9 @@ from PIL import Image
 import io
 import base64
 from dataclasses import dataclass
-import logging
 from transformers import AutoProcessor, AutoModelForVision2Seq
 import torch
-
-logger = logging.getLogger(__name__)
-
+from loguru import logger
 @dataclass
 class ImageMetadata:
     width: int
@@ -39,47 +36,74 @@ class ImageProcessor:
         """Process a PDF page to extract and analyze images."""
         images = []
         
-        # Get list of images on the page
-        image_list = page.get_images(full=True)
-        
-        for img_idx, img in enumerate(image_list):
-            try:
-                xref = img[0]
-                base_image = page.parent.extract_image(xref)
-                
-                if base_image and self._check_image_quality(base_image):
-                    image_rect = page.get_image_bbox(img)
-                    processed_image = self._process_single_image(base_image, image_rect)
-                    
-                    if processed_image:
-                        processed_image["id"] = img_idx
-                        images.append(processed_image)
+        try:
+            # Get list of images on the page
+            image_list = page.get_images(full=True)
             
-            except Exception as e:
-                logger.error(f"Error processing image {img_idx}: {e}")
-                continue
-        
-        return images
+            if not image_list:
+                logger.info("No images found on page")
+                return images
+            
+            for img_idx, img in enumerate(image_list):
+                try:
+                    if not img or not img[0]:
+                        logger.warning(f"Invalid image data at index {img_idx}")
+                        continue
+                        
+                    xref = img[0]
+                    base_image = page.parent.extract_image(xref)
+                    
+                    if not base_image:
+                        logger.warning(f"Failed to extract image at index {img_idx}")
+                        continue
+                    
+                    if self._check_image_quality(base_image):
+                        image_rect = page.get_image_bbox(img)
+                        processed_image = self._process_single_image(base_image, image_rect)
+                        
+                        if processed_image:
+                            processed_image["id"] = img_idx
+                            images.append(processed_image)
+                    else:
+                        logger.info(f"Image {img_idx} did not meet quality requirements")
+                    
+                except Exception as e:
+                    logger.warning(f"Error processing image {img_idx}: {e}", exc_info=True)
+                    continue
+            
+            return images
+            
+        except Exception as e:
+            logger.error(f"Error in image processing: {e}", exc_info=True)
+            return []
 
     def _check_image_quality(self, image_data: Dict) -> bool:
         """Check if the image meets quality requirements."""
         try:
-            # Check image dimensions
+            # Basic size check
+            if not image_data.get("width") or not image_data.get("height"):
+                return False
+            
             if image_data["width"] < self.min_size or image_data["height"] < self.min_size:
                 return False
             
-            # Check color depth
-            if image_data["colorspace"] not in [1, 3, 4]:  # Gray, RGB, CMYK
+            # Check for valid image data
+            if not image_data.get("image"):
                 return False
             
-            # Check bits per component
-            if image_data["bpc"] < 8:
+            # Check color depth
+            if image_data.get("bpc", 0) < 4:  # Minimum bits per component
+                return False
+            
+            # Check data size
+            min_data_size = 100  # Minimum bytes for a valid image
+            if len(image_data["image"]) < min_data_size:
                 return False
             
             return True
         
         except Exception as e:
-            logger.error(f"Error checking image quality: {e}")
+            logger.error(f"Error in image quality check: {e}")
             return False
 
     def _process_single_image(self, 
@@ -87,48 +111,68 @@ class ImageProcessor:
                             image_rect: fitz.Rect) -> Dict[str, Any]:
         """Process a single image extracted from the PDF."""
         try:
-            # Convert image bytes to PIL Image
-            image_bytes = base_image["image"]
-            image = Image.frombytes(
-                "RGB" if base_image["colorspace"] == 3 else "L",
-                [base_image["width"], base_image["height"]],
-                image_bytes
-            )
+            # Validate image data
+            if not base_image.get("image"):
+                logger.warning("No image data found in base_image")
+                return None
             
-            # Generate image metadata
-            metadata = ImageMetadata(
-                width=base_image["width"],
-                height=base_image["height"],
-                format=base_image["ext"],
-                color_space=self._get_colorspace_name(base_image["colorspace"]),
-                bits_per_component=base_image["bpc"]
-            )
+            # Get image format and color space
+            image_format = base_image.get("ext", "").upper()
+            colorspace = base_image.get("colorspace")
             
-            # Generate image description
-            description = self._generate_image_description(image)
+            try:
+                # More robust image conversion
+                image_bytes = base_image["image"]
+                if image_format == "JPEG":
+                    # Direct JPEG handling
+                    image = Image.open(io.BytesIO(image_bytes))
+                else:
+                    # Default handling
+                    mode = "RGB" if colorspace == 3 else "L"
+                    image = Image.frombytes(
+                        mode,
+                        [base_image["width"], base_image["height"]],
+                        image_bytes
+                    )
+                
+                # Generate metadata
+                metadata = ImageMetadata(
+                    width=base_image["width"],
+                    height=base_image["height"],
+                    format=image_format,
+                    color_space=self._get_colorspace_name(colorspace),
+                    bits_per_component=base_image.get("bpc", 8)
+                )
+                
+                # Generate image description
+                description = self._generate_image_description(image)
+                
+                # Convert image to base64 for storage/transmission
+                buffered = io.BytesIO()
+                image.save(buffered, format=image_format if image_format else "PNG")
+                img_str = base64.b64encode(buffered.getvalue()).decode()
+                
+                # Extract features for vector search
+                features = self._extract_image_features(image)
+                
+                return {
+                    "position": {
+                        "x0": image_rect.x0,
+                        "y0": image_rect.y0,
+                        "x1": image_rect.x1,
+                        "y1": image_rect.y1
+                    },
+                    "metadata": vars(metadata),
+                    "description": description,
+                    "features": features,
+                    "base64_image": img_str,
+                    "image_type": self._determine_image_type(image)
+                }
+                
+            except IOError as e:
+                logger.error(f"IOError processing image: {e}")
+                return None
             
-            # Convert image to base64 for storage/transmission
-            buffered = io.BytesIO()
-            image.save(buffered, format=base_image["ext"])
-            img_str = base64.b64encode(buffered.getvalue()).decode()
-            
-            # Extract features for vector search
-            features = self._extract_image_features(image)
-            
-            return {
-                "position": {
-                    "x0": image_rect.x0,
-                    "y0": image_rect.y0,
-                    "x1": image_rect.x1,
-                    "y1": image_rect.y1
-                },
-                "metadata": vars(metadata),
-                "description": description,
-                "features": features,
-                "base64_image": img_str,
-                "image_type": self._determine_image_type(image)
-            }
-        
         except Exception as e:
             logger.error(f"Error processing single image: {e}")
             return None

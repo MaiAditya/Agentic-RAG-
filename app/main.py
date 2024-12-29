@@ -8,10 +8,8 @@ import shutil
 import json
 import asyncio
 import uvicorn
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from loguru import logger
+from app.core.logger import logger  # This will configure the logger
 
 def initialize_nltk():
     """Initialize NLTK with all required resources."""

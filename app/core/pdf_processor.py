@@ -1,12 +1,10 @@
 from typing import List, Dict, Any
 import fitz  # PyMuPDF
-import logging
 import os
 from .text_processor import TextProcessor
 from .table_processor import TableProcessor
 from .image_processor import ImageProcessor
-
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 class PDFProcessor:
     def __init__(self):
@@ -18,17 +16,18 @@ class PDFProcessor:
     async def process(self, pdf_content: bytes) -> Dict[str, Any]:
         """Process PDF content using specialized processors for text, tables, and images."""
         temp_path = "temp.pdf"
+        doc = None
         try:
             with open(temp_path, "wb") as f:
                 f.write(pdf_content)
 
             doc = fitz.open(temp_path)
             pages = []
+            metadata = self._extract_metadata(doc)  # Extract metadata before processing pages
 
             for page_num in range(len(doc)):
                 page = doc[page_num]
                 
-                # Process each component using specialized processors
                 text_blocks = await self.text_processor.process(page)
                 tables = await self.table_processor.process(page)
                 images = await self.image_processor.process(page)
@@ -41,16 +40,17 @@ class PDFProcessor:
                     "layout": self._analyze_layout(page)
                 })
 
-            doc.close()
             return {
                 "pages": pages,
-                "metadata": self._extract_metadata(doc)
+                "metadata": metadata
             }
 
         except Exception as e:
             logger.error(f"Error processing PDF: {e}")
             raise
         finally:
+            if doc:
+                doc.close()
             if os.path.exists(temp_path):
                 os.remove(temp_path)
 

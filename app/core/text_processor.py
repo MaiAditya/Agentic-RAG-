@@ -6,10 +6,8 @@ from transformers import AutoTokenizer, AutoModel
 import torch
 import numpy as np
 from dataclasses import dataclass
-import logging
 from collections import defaultdict
-
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 @dataclass
 class TextBlock:
