@@ -6,6 +6,7 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 from app.config import settings
 import json
+from loguru import logger
 
 class LocalEmbeddingFunction(EmbeddingFunction):
     def __init__(self):
@@ -143,3 +144,42 @@ class ChromaDBClient:
                 }
         
         return results
+
+    async def query_collection(self, collection_name: str, query_text: str, limit: int = 3) -> List[Dict[str, Any]]:
+        """Query a specific collection."""
+        try:
+            collection = self.collections.get(collection_name)
+            if not collection:
+                logger.error(f"Collection {collection_name} not found")
+                return []
+
+            collection_size = collection.count()
+            actual_limit = min(limit, collection_size)
+            
+            if actual_limit == 0:
+                return []
+
+            results = collection.query(
+                query_texts=[query_text],
+                n_results=actual_limit
+            )
+            
+            return [
+                {
+                    "content": doc,
+                    "metadata": {
+                        k: json.loads(v) if k in ["position", "size"] and isinstance(v, str) else v 
+                        for k, v in meta.items()
+                    },
+                    "score": 1 - dist  # Convert distance to similarity score
+                }
+                for doc, meta, dist in zip(
+                    results["documents"][0],
+                    results["metadatas"][0],
+                    results["distances"][0]
+                )
+            ]
+            
+        except Exception as e:
+            logger.exception(f"Error querying collection {collection_name}: {e}")
+            return []

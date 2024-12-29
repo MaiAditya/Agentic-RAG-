@@ -8,10 +8,8 @@ import shutil
 import json
 import asyncio
 import uvicorn
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from loguru import logger
+from app.core.logger import logger  # This will configure the logger
 
 def initialize_nltk():
     """Initialize NLTK with all required resources."""
@@ -56,33 +54,43 @@ app.add_middleware(
 )
 
 # Initialize components
-chroma_client = ChromaDBClient()
 pdf_processor = PDFProcessor()
+chroma_client = ChromaDBClient()
 pdf_agent = PDFAgent(pdf_processor, chroma_client)
 
 @app.post("/process-pdf")
 async def process_pdf(file: UploadFile = File(...)):
-    """
-    Process a PDF file and store its contents in the vector database.
-    """
+    """Process a PDF file and store its contents in the vector database."""
     try:
         if not file.filename.endswith('.pdf'):
             raise HTTPException(status_code=400, detail="File must be a PDF")
         
         logger.info(f"Processing PDF file: {file.filename}")
         contents = await file.read()
-        logger.info(f"File size: {len(contents)} bytes")
+        file_size = len(contents)
+        logger.info(f"File size: {file_size} bytes")
+        
+        if file_size == 0:
+            raise HTTPException(status_code=400, detail="Empty PDF file")
         
         result = await pdf_agent.process_pdf(contents)
         logger.info("PDF processing completed successfully")
         
         return JSONResponse(
-            content={"status": "success", "message": "PDF processed successfully", "details": result},
+            content={
+                "status": "success", 
+                "message": "PDF processed successfully",
+                "file_size": file_size,
+                "details": result
+            },
             status_code=200
         )
+    except ValueError as e:
+        logger.error(f"Validation error: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error(f"Error processing PDF: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 @app.post("/query")
 async def query(query: str):

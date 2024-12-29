@@ -6,10 +6,8 @@ from transformers import AutoTokenizer, AutoModel
 import torch
 import numpy as np
 from dataclasses import dataclass
-import logging
 from collections import defaultdict
-
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 @dataclass
 class TextBlock:
@@ -25,18 +23,16 @@ class TextProcessor:
     def __init__(self):
         self.min_block_length = 10
         try:
-            # Load SpaCy for NLP tasks
-            self.nlp = spacy.load("en_core_web_sm")
-            # Load BERT tokenizer and model for embeddings
-            self.tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-mpnet-base-v2")
-            self.model = AutoModel.from_pretrained("sentence-transformers/all-mpnet-base-v2")
-            self.device = "cuda" if torch.cuda.is_available() else "cpu"
-            self.model.to(self.device)
+            # Try to load the model, download if not present
+            try:
+                self.nlp = spacy.load("en_core_web_sm")
+            except OSError:
+                logger.info("Downloading spaCy model...")
+                spacy.cli.download("en_core_web_sm")
+                self.nlp = spacy.load("en_core_web_sm")
         except Exception as e:
             logger.error(f"Error initializing models: {e}")
             self.nlp = None
-            self.tokenizer = None
-            self.model = None
 
     async def process(self, page: fitz.Page) -> List[Dict[str, Any]]:
         """Process text content from a PDF page."""
