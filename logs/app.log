@@ -2072,3 +2072,374 @@ See https://docs.trychroma.com/migration for more information or join our discor
 2025-01-01 23:31:24 | INFO     | app.agents.pdf_agent:document_search:225 - Found 4 results in tables
 2025-01-01 23:31:24 | INFO     | app.agents.pdf_agent:document_search:225 - Found 0 results in images
 2025-01-01 23:31:24 | INFO     | app.agents.pdf_agent:answer_query:136 - Found 9 relevant documents
+2025-01-02 03:40:45 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: punkt
+2025-01-02 03:40:45 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: averaged_perceptron_tagger
+2025-01-02 03:40:45 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: universal_tagset
+2025-01-02 03:40:45 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: stopwords
+2025-01-02 03:40:45 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: wordnet
+2025-01-02 03:40:45 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: omw-1.4
+2025-01-02 03:42:03 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: punkt
+2025-01-02 03:42:03 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: averaged_perceptron_tagger
+2025-01-02 03:42:03 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: universal_tagset
+2025-01-02 03:42:03 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: stopwords
+2025-01-02 03:42:03 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: wordnet
+2025-01-02 03:42:03 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: omw-1.4
+2025-01-02 03:51:26 | ERROR    | app.core.image_processor:__init__:55 - Error initializing image processing models: 
+DetrConvEncoder requires the timm library but it was not found in your environment. You can install it with pip:
+`pip install timm`. Please note that you may need to restart your runtime after installation.
+
+2025-01-02 03:52:42 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: punkt
+2025-01-02 03:52:42 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: averaged_perceptron_tagger
+2025-01-02 03:52:42 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: universal_tagset
+2025-01-02 03:52:42 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: stopwords
+2025-01-02 03:52:42 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: wordnet
+2025-01-02 03:52:42 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: omw-1.4
+2025-01-02 03:53:04 | INFO     | app.core.image_processor:__init__:52 - Image processing models loaded successfully on cpu
+2025-01-02 03:53:08 | INFO     | app.database.chroma_client:__init__:73 - Successfully initialized ChromaDB with collections: ['text', 'tables', 'images']
+2025-01-02 03:53:35 | INFO     | __main__:process_pdf:69 - Processing PDF file: al-cigna-dental-1500-policy (1).pdf
+2025-01-02 03:53:35 | INFO     | __main__:process_pdf:72 - File size: 245191 bytes
+2025-01-02 03:53:35 | INFO     | app.core.pdf_processor:process:108 - Opened PDF with 31 pages
+2025-01-02 03:53:35 | INFO     | app.core.pdf_processor:process:117 - Processing page 1
+2025-01-02 03:53:35 | INFO     | app.core.pdf_processor:process:128 - Found 16 text blocks on page 1
+2025-01-02 03:53:35 | ERROR    | app.core.pdf_processor:process:156 - Error processing PDF: 'ImageProcessor' object has no attribute 'process'
+2025-01-02 03:53:35 | ERROR    | app.agents.pdf_agent:process_pdf:106 - Error in process_pdf: 'ImageProcessor' object has no attribute 'process'
+2025-01-02 03:53:35 | ERROR    | __main__:process_pdf:90 - Validation error: Failed to process PDF: 'ImageProcessor' object has no attribute 'process'
+2025-01-02 03:54:25 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: punkt
+2025-01-02 03:54:25 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: averaged_perceptron_tagger
+2025-01-02 03:54:25 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: universal_tagset
+2025-01-02 03:54:25 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: stopwords
+2025-01-02 03:54:25 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: wordnet
+2025-01-02 03:54:25 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: omw-1.4
+2025-01-02 03:54:36 | INFO     | app.core.image_processor:__init__:52 - Image processing models loaded successfully on cpu
+2025-01-02 03:54:39 | INFO     | app.database.chroma_client:__init__:73 - Successfully initialized ChromaDB with collections: ['text', 'tables', 'images']
+2025-01-02 03:54:44 | INFO     | __main__:process_pdf:69 - Processing PDF file: al-cigna-dental-1500-policy (1).pdf
+2025-01-02 03:54:44 | INFO     | __main__:process_pdf:72 - File size: 245191 bytes
+2025-01-02 03:54:44 | INFO     | app.core.pdf_processor:process:108 - Opened PDF with 31 pages
+2025-01-02 03:54:44 | INFO     | app.core.pdf_processor:process:117 - Processing page 1
+2025-01-02 03:54:44 | INFO     | app.core.pdf_processor:process:128 - Found 16 text blocks on page 1
+2025-01-02 03:54:44 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:140 - Found 1 tables on page 1
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 2
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 18 text blocks on page 2
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 3
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 7 text blocks on page 3
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 4
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 4 text blocks on page 4
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 5
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 15 text blocks on page 5
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 6
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 8 text blocks on page 6
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 7
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 18 text blocks on page 7
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:140 - Found 1 tables on page 7
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 8
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 34 text blocks on page 8
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:140 - Found 1 tables on page 8
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 9
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 32 text blocks on page 9
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:140 - Found 1 tables on page 9
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 10
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 17 text blocks on page 10
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 11
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 18 text blocks on page 11
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 12
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 29 text blocks on page 12
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 13
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 26 text blocks on page 13
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 14
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 26 text blocks on page 14
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 15
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 24 text blocks on page 15
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 16
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 20 text blocks on page 16
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 17
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 22 text blocks on page 17
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 18
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 30 text blocks on page 18
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 19
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 27 text blocks on page 19
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 20
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 6 text blocks on page 20
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 21
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 12 text blocks on page 21
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 22
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 8 text blocks on page 22
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 23
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 10 text blocks on page 23
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 24
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 6 text blocks on page 24
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 25
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 11 text blocks on page 25
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 26
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 14 text blocks on page 26
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 27
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 7 text blocks on page 27
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 28
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 4 text blocks on page 28
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 29
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 7 text blocks on page 29
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 30
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 3 text blocks on page 30
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:117 - Processing page 31
+2025-01-02 03:54:45 | INFO     | app.core.pdf_processor:process:128 - Found 4 text blocks on page 31
+2025-01-02 03:54:45 | ERROR    | app.core.image_processor:process:229 - Error in image processing: a bytes-like object is required, not 'Page'
+2025-01-02 03:54:45 | INFO     | app.agents.pdf_agent:process_pdf:92 - Processed 35 documents from PDF
+2025-01-02 03:54:47 | INFO     | app.database.chroma_client:_add_to_collection:299 - Successfully added 31 documents to text collection
+2025-01-02 03:54:47 | INFO     | app.database.chroma_client:_add_to_collection:299 - Successfully added 4 documents to tables collection
+2025-01-02 03:54:47 | INFO     | __main__:process_pdf:78 - PDF processing completed successfully
+2025-01-02 03:55:58 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: punkt
+2025-01-02 03:55:58 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: averaged_perceptron_tagger
+2025-01-02 03:55:58 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: universal_tagset
+2025-01-02 03:55:58 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: stopwords
+2025-01-02 03:55:58 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: wordnet
+2025-01-02 03:55:58 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: omw-1.4
+2025-01-02 03:56:14 | INFO     | app.core.image_processor:__init__:52 - Image processing models loaded successfully on cpu
+2025-01-02 03:56:16 | INFO     | app.database.chroma_client:__init__:73 - Successfully initialized ChromaDB with collections: ['text', 'tables', 'images']
+2025-01-02 03:56:22 | INFO     | __main__:process_pdf:69 - Processing PDF file: al-cigna-dental-1500-policy (1).pdf
+2025-01-02 03:56:22 | INFO     | __main__:process_pdf:72 - File size: 245191 bytes
+2025-01-02 03:56:22 | INFO     | app.core.pdf_processor:process:108 - Opened PDF with 31 pages
+2025-01-02 03:56:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 1
+2025-01-02 03:56:22 | INFO     | app.core.pdf_processor:process:128 - Found 16 text blocks on page 1
+2025-01-02 03:59:21 | INFO     | app.core.pdf_processor:process:134 - Found 4 images on page 1
+2025-01-02 03:59:21 | INFO     | app.core.pdf_processor:process:140 - Found 1 tables on page 1
+2025-01-02 03:59:21 | INFO     | app.core.pdf_processor:process:117 - Processing page 2
+2025-01-02 03:59:21 | INFO     | app.core.pdf_processor:process:128 - Found 18 text blocks on page 2
+2025-01-02 03:59:21 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:21 | INFO     | app.core.pdf_processor:process:117 - Processing page 3
+2025-01-02 03:59:21 | INFO     | app.core.pdf_processor:process:128 - Found 7 text blocks on page 3
+2025-01-02 03:59:21 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:21 | INFO     | app.core.pdf_processor:process:117 - Processing page 4
+2025-01-02 03:59:21 | INFO     | app.core.pdf_processor:process:128 - Found 4 text blocks on page 4
+2025-01-02 03:59:21 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:21 | INFO     | app.core.pdf_processor:process:117 - Processing page 5
+2025-01-02 03:59:21 | INFO     | app.core.pdf_processor:process:128 - Found 15 text blocks on page 5
+2025-01-02 03:59:21 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:21 | INFO     | app.core.pdf_processor:process:117 - Processing page 6
+2025-01-02 03:59:21 | INFO     | app.core.pdf_processor:process:128 - Found 8 text blocks on page 6
+2025-01-02 03:59:21 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:21 | INFO     | app.core.pdf_processor:process:117 - Processing page 7
+2025-01-02 03:59:21 | INFO     | app.core.pdf_processor:process:128 - Found 18 text blocks on page 7
+2025-01-02 03:59:21 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:21 | INFO     | app.core.pdf_processor:process:140 - Found 1 tables on page 7
+2025-01-02 03:59:21 | INFO     | app.core.pdf_processor:process:117 - Processing page 8
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 34 text blocks on page 8
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:140 - Found 1 tables on page 8
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 9
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 32 text blocks on page 9
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:140 - Found 1 tables on page 9
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 10
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 17 text blocks on page 10
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 11
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 18 text blocks on page 11
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 12
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 29 text blocks on page 12
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 13
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 26 text blocks on page 13
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 14
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 26 text blocks on page 14
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 15
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 24 text blocks on page 15
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 16
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 20 text blocks on page 16
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 17
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 22 text blocks on page 17
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 18
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 30 text blocks on page 18
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 19
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 27 text blocks on page 19
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 20
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 6 text blocks on page 20
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 21
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 12 text blocks on page 21
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 22
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 8 text blocks on page 22
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 23
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 10 text blocks on page 23
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 24
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 6 text blocks on page 24
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 25
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 11 text blocks on page 25
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 26
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 14 text blocks on page 26
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 27
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 7 text blocks on page 27
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 28
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 4 text blocks on page 28
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 29
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 7 text blocks on page 29
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 30
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 3 text blocks on page 30
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:117 - Processing page 31
+2025-01-02 03:59:22 | INFO     | app.core.pdf_processor:process:128 - Found 4 text blocks on page 31
+2025-01-02 03:59:22 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 03:59:22 | ERROR    | app.agents.pdf_agent:process_pdf:106 - Error in process_pdf: 'str' object has no attribute 'get'
+2025-01-02 03:59:22 | ERROR    | __main__:process_pdf:90 - Validation error: Failed to process PDF: 'str' object has no attribute 'get'
+2025-01-02 04:00:40 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: punkt
+2025-01-02 04:00:40 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: averaged_perceptron_tagger
+2025-01-02 04:00:40 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: universal_tagset
+2025-01-02 04:00:40 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: stopwords
+2025-01-02 04:00:40 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: wordnet
+2025-01-02 04:00:40 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: omw-1.4
+2025-01-02 04:00:57 | INFO     | app.core.image_processor:__init__:52 - Image processing models loaded successfully on cpu
+2025-01-02 04:01:01 | INFO     | app.database.chroma_client:__init__:73 - Successfully initialized ChromaDB with collections: ['text', 'tables', 'images']
+2025-01-02 04:01:15 | INFO     | __main__:process_pdf:69 - Processing PDF file: al-cigna-dental-1500-policy (1).pdf
+2025-01-02 04:01:15 | INFO     | __main__:process_pdf:72 - File size: 245191 bytes
+2025-01-02 04:01:15 | INFO     | app.core.pdf_processor:process:108 - Opened PDF with 31 pages
+2025-01-02 04:01:15 | INFO     | app.core.pdf_processor:process:117 - Processing page 1
+2025-01-02 04:01:15 | INFO     | app.core.pdf_processor:process:128 - Found 16 text blocks on page 1
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:134 - Found 2 images on page 1
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:140 - Found 1 tables on page 1
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:117 - Processing page 2
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:128 - Found 18 text blocks on page 2
+2025-01-02 04:03:09 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:117 - Processing page 3
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:128 - Found 7 text blocks on page 3
+2025-01-02 04:03:09 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:117 - Processing page 4
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:128 - Found 4 text blocks on page 4
+2025-01-02 04:03:09 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:117 - Processing page 5
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:128 - Found 15 text blocks on page 5
+2025-01-02 04:03:09 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:117 - Processing page 6
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:128 - Found 8 text blocks on page 6
+2025-01-02 04:03:09 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:117 - Processing page 7
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:128 - Found 18 text blocks on page 7
+2025-01-02 04:03:09 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:140 - Found 1 tables on page 7
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:117 - Processing page 8
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:128 - Found 34 text blocks on page 8
+2025-01-02 04:03:09 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:140 - Found 1 tables on page 8
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:117 - Processing page 9
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:128 - Found 32 text blocks on page 9
+2025-01-02 04:03:09 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:140 - Found 1 tables on page 9
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:117 - Processing page 10
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:128 - Found 17 text blocks on page 10
+2025-01-02 04:03:09 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:117 - Processing page 11
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:128 - Found 18 text blocks on page 11
+2025-01-02 04:03:09 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:117 - Processing page 12
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:128 - Found 29 text blocks on page 12
+2025-01-02 04:03:09 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:117 - Processing page 13
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:128 - Found 26 text blocks on page 13
+2025-01-02 04:03:09 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:117 - Processing page 14
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:128 - Found 26 text blocks on page 14
+2025-01-02 04:03:09 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:117 - Processing page 15
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:128 - Found 24 text blocks on page 15
+2025-01-02 04:03:09 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:09 | INFO     | app.core.pdf_processor:process:117 - Processing page 16
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:128 - Found 20 text blocks on page 16
+2025-01-02 04:03:10 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:117 - Processing page 17
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:128 - Found 22 text blocks on page 17
+2025-01-02 04:03:10 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:117 - Processing page 18
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:128 - Found 30 text blocks on page 18
+2025-01-02 04:03:10 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:117 - Processing page 19
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:128 - Found 27 text blocks on page 19
+2025-01-02 04:03:10 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:117 - Processing page 20
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:128 - Found 6 text blocks on page 20
+2025-01-02 04:03:10 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:117 - Processing page 21
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:128 - Found 12 text blocks on page 21
+2025-01-02 04:03:10 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:117 - Processing page 22
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:128 - Found 8 text blocks on page 22
+2025-01-02 04:03:10 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:117 - Processing page 23
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:128 - Found 10 text blocks on page 23
+2025-01-02 04:03:10 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:117 - Processing page 24
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:128 - Found 6 text blocks on page 24
+2025-01-02 04:03:10 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:117 - Processing page 25
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:128 - Found 11 text blocks on page 25
+2025-01-02 04:03:10 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:117 - Processing page 26
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:128 - Found 14 text blocks on page 26
+2025-01-02 04:03:10 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:117 - Processing page 27
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:128 - Found 7 text blocks on page 27
+2025-01-02 04:03:10 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:117 - Processing page 28
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:128 - Found 4 text blocks on page 28
+2025-01-02 04:03:10 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:117 - Processing page 29
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:128 - Found 7 text blocks on page 29
+2025-01-02 04:03:10 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:117 - Processing page 30
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:128 - Found 3 text blocks on page 30
+2025-01-02 04:03:10 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:117 - Processing page 31
+2025-01-02 04:03:10 | INFO     | app.core.pdf_processor:process:128 - Found 4 text blocks on page 31
+2025-01-02 04:03:10 | INFO     | app.core.image_processor:process:213 - No images found on page
+2025-01-02 04:03:10 | INFO     | app.agents.pdf_agent:process_pdf:92 - Processed 37 documents from PDF
+2025-01-02 04:03:12 | INFO     | app.database.chroma_client:_add_to_collection:299 - Successfully added 31 documents to text collection
+2025-01-02 04:03:12 | INFO     | app.database.chroma_client:_add_to_collection:299 - Successfully added 4 documents to tables collection
+2025-01-02 04:03:12 | INFO     | app.database.chroma_client:_add_to_collection:299 - Successfully added 2 documents to images collection
+2025-01-02 04:03:12 | INFO     | __main__:process_pdf:78 - PDF processing completed successfully
+2025-01-02 04:03:52 | INFO     | app.agents.pdf_agent:document_search:225 - Found 5 results in text
+2025-01-02 04:03:52 | INFO     | app.agents.pdf_agent:document_search:225 - Found 5 results in tables
+2025-01-02 04:03:52 | INFO     | app.agents.pdf_agent:document_search:225 - Found 2 results in images
+2025-01-02 04:03:52 | INFO     | app.agents.pdf_agent:answer_query:136 - Found 12 relevant documents
