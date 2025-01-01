@@ -55,11 +55,14 @@ A comprehensive PDF processing and question-answering system leveraging RAG (Ret
 curl -sSL https://install.python-poetry.org | python3 -
 
 # Clone the repository
-git clone https://github.com/yourusername/multimodal-pdf-pipeline
-cd multimodal-pdf-pipeline
+git clone https://github.com/MaiAditya/Agentic-RAG-.git
+cd Agentic-RAG-/
 
 # Install dependencies
 poetry install
+
+# For running the server
+poetry run python -m app.main
 
 # Activate virtual environment
 poetry shell
@@ -390,34 +393,6 @@ pytest = "^6.2.5"
 black = "^21.7b0"
 isort = "^5.9.3"
 flake8 = "^3.9.2"
-```
-
-## Development
-
-### Project Structure
-
-```plaintext
-pdf-pipeline/
-├── app/
-│   ├── main.py
-│   ├── agents/
-│   ├── processors/
-│   └── utils/
-├── tests/
-├── docs/
-├── docker/
-├── requirements.txt
-└── README.md
-```
-
-### Running Tests
-
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=app tests/
 ```
 
 ## Troubleshooting
