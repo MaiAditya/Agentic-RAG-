@@ -55,15 +55,13 @@ RUN pip install --upgrade pip && \
 RUN python -c "import nltk; nltk.download('punkt'); nltk.download('averaged_perceptron_tagger'); nltk.download('universal_tagset'); nltk.download('stopwords'); nltk.download('wordnet'); nltk.download('omw-1.4')" \
     && python -m spacy download en_core_web_sm
 
-# Create necessary directories
-RUN mkdir -p /app/chroma_db /app/logs
+# Create necessary directories and set permissions
+RUN mkdir -p /app/chroma_db /app/logs && \
+    chown -R nobody:nogroup /app/chroma_db /app/logs && \
+    chmod -R 777 /app/chroma_db /app/logs
 
-# Create and set permissions for ChromaDB directory
-RUN mkdir -p /app/chroma_db && chmod 777 /app/chroma_db
-
-# Copy application code and fix device string
+# Copy application code
 COPY app ./app
-RUN sed -i 's/device="cpu "/device="cpu"/g' /app/app/database/chroma_client.py
 
 EXPOSE 8000
 
