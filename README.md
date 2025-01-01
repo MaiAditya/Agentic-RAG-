@@ -35,6 +35,7 @@ This system allows users to:
    - Retrieves relevant context for queries
 
 ### Tools
+
 1. **Document Search Tool**
    - Searches text content in the document
    - Returns top 3 most relevant results
@@ -87,23 +88,133 @@ This system allows users to:
    - Detailed logging for debugging and monitoring
    - Graceful fallbacks for processing failures
 
-## Setup and Usage
+## New Sections
 
-1. **Environment Setup**
+### Development Setup
+
+1. **Prerequisites**
    ```bash
-   # Install dependencies using Poetry
-   poetry install
+   # Install required system dependencies
+   sudo apt-get update
+   sudo apt-get install -y build-essential libgl1-mesa-glx libglib2.0-0
    
-   # Set up environment variables
-   cp .env.example .env
-   # Edit .env with your configurations
+   # Install Poetry
+   curl -sSL https://install.python-poetry.org | python3 -
    ```
 
-2. **Required Environment Variables**
-   - `OPENAI_API_KEY`: Your OpenAI API key
-   - `PORT`: Server port (default: 8000)
-   - `HOST`: Host address (default: 0.0.0.0)
-   - `CHROMA_DB_PATH`: ChromaDB storage path
+2. **Local Development**
+   ```bash
+   # Clone repository
+   git clone https://github.com/yourusername/multimodal-pdf-pipeline.git
+   cd multimodal-pdf-pipeline
+   
+   # Install dependencies
+   poetry install
+   
+   # Run development server
+   poetry run uvicorn app.main:app --reload
+   ```
+
+### Docker Deployment
+
+1. **Using Docker Compose**
+   ```bash
+   # Build and start services
+   docker-compose up --build
+   
+   # Stop services
+   docker-compose down
+   ```
+
+2. **Manual Docker Build**
+   ```bash
+   # Build image
+   docker build -t pdf-pipeline .
+   
+   # Run container
+   docker run -p 8000:8000 -v $(pwd)/data:/app/data pdf-pipeline
+   ```
+
+### Testing
+
+1. **Running Tests**
+   ```bash
+   # Run all tests
+   poetry run pytest
+   
+   # Run specific test file
+   poetry run pytest tests/test_pdf_agent.py
+   
+   # Run with coverage
+   poetry run pytest --cov=app tests/
+   ```
+
+### Performance Optimization
+
+1. **Memory Management**
+   - Streaming large PDF files
+   - Batch processing for images
+   - Efficient vector storage
+   - Resource cleanup
+
+2. **Processing Speed**
+   - Parallel image processing
+   - Caching mechanisms
+   - Optimized embeddings generation
+   - Efficient database queries
+
+### Security Considerations
+
+1. **File Validation**
+   - PDF file size limits
+   - Content type verification
+   - Malware scanning
+   - Access control
+
+2. **API Security**
+   - Rate limiting
+   - Authentication
+   - Input validation
+   - Secure data storage
+
+### Monitoring and Logging
+
+1. **Application Metrics**
+   - Processing times
+   - Error rates
+   - Resource usage
+   - API response times
+
+2. **Log Management**
+   - Structured logging
+   - Log rotation
+   - Error tracking
+   - Performance monitoring
+
+### Contributing
+
+1. **Development Guidelines**
+   - Code style (Black + isort)
+   - Type hints
+   - Documentation
+   - Test coverage
+
+2. **Pull Request Process**
+   - Feature branches
+   - Code review
+   - CI/CD pipeline
+   - Version management
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- OpenAI for GPT models
+- ChromaDB team for vector storage
+- LangChain for RAG implementation
+- PyMuPDF for PDF processing
 
 ## Dependencies
 

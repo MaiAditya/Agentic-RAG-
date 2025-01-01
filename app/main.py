@@ -114,5 +114,42 @@ async def health_check():
     """
     return {"status": "healthy"}
 
+@app.get("/stats")
+async def get_stats():
+    """
+    Get statistics about the document collections.
+    """
+    try:
+        stats = await chroma_client.get_collection_stats()
+        return JSONResponse(
+            content={"status": "success", "stats": stats},
+            status_code=200
+        )
+    except Exception as e:
+        logger.error(f"Error getting stats: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/debug-document")
+async def debug_document(file: UploadFile):
+    """
+    Debug endpoint to check document processing.
+    """
+    try:
+        contents = await file.read()
+        doc = await process_document(contents)
+        return JSONResponse(
+            content={
+                "status": "success",
+                "document_structure": {
+                    "num_pages": len(doc.get("pages", [])),
+                    "sample_page": doc.get("pages", [{}])[0] if doc.get("pages") else None,
+                }
+            },
+            status_code=200
+        )
+    except Exception as e:
+        logger.error(f"Error in debug-document: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 if __name__ == "__main__":
     uvicorn.run(app, host=settings.HOST, port=settings.PORT)

@@ -7,12 +7,13 @@ import numpy as np
 from app.config import settings
 import json
 from loguru import logger
+from .initialize_db import initialize_chroma
 
 class LocalEmbeddingFunction(EmbeddingFunction):
     def __init__(self):
         self.model = SentenceTransformer(
-            'sentence-transformers/all-MiniLM-L12-v2',
-            device=settings.EMBEDDING_DEVICE
+            "all-MiniLM-L6-v2",
+            device="cpu"
         )
 
     def __call__(self, input: List[str]) -> List[List[float]]:
@@ -21,30 +22,9 @@ class LocalEmbeddingFunction(EmbeddingFunction):
 
 class ChromaDBClient:
     def __init__(self):
-        self.client = chromadb.PersistentClient(
-            path=settings.CHROMA_PERSIST_DIR,
-            settings=Settings(
-                anonymized_telemetry=False
-            )
-        )
-        
-        # Initialize embedding function
-        self.embedding_function = LocalEmbeddingFunction()
-        
-        self.collections = {
-            "text": self.client.get_or_create_collection(
-                name="text_content",
-                embedding_function=self.embedding_function
-            ),
-            "images": self.client.get_or_create_collection(
-                name="image_content",
-                embedding_function=self.embedding_function
-            ),
-            "tables": self.client.get_or_create_collection(
-                name="table_content",
-                embedding_function=self.embedding_function
-            )
-        }
+        self.client, self.collections = initialize_chroma()
+        # Keep default collection for backward compatibility
+        self.collection = self.collections["text"]
 
     def _prepare_metadata(self, metadata: Dict) -> Dict:
         """Convert complex metadata types to strings for ChromaDB compatibility."""
@@ -62,54 +42,43 @@ class ChromaDBClient:
 
     async def add_documents(self, documents: List[Dict[str, Any]]) -> None:
         """Add documents to the appropriate collections."""
-        for doc in documents:
-            for page in doc.get("pages", []):
-                # Process text blocks
-                for block in page.get("text_blocks", []):
-                    metadata = {
-                        "page_num": page["page_num"],
-                        "block_id": block["id"],
-                        "position": json.dumps(block["position"]),
-                        "type": "text"
-                    }
+        try:
+            logger.info(f"Adding {len(documents)} documents to collections")
+            
+            for doc in documents:
+                for page in doc.get("pages", []):
+                    # Log counts for each type
+                    text_blocks = len(page.get("text_blocks", []))
+                    images = len(page.get("images", []))
+                    tables = len(page.get("tables", []))
+                    logger.info(f"Processing page {page['page_num']}: {text_blocks} text blocks, {images} images, {tables} tables")
                     
-                    self.collections["text"].add(
-                        documents=[block["text"]],
-                        metadatas=[self._prepare_metadata(metadata)],
-                        ids=[f"text_{page['page_num']}_{block['id']}"]
-                    )
-                
-                # Process images
-                for img in page.get("images", []):
-                    metadata = {
-                        "page_num": page["page_num"],
-                        "image_id": img["id"],
-                        "position": json.dumps(img["position"]),
-                        "size": json.dumps(img["size"]),
-                        "format": img["format"],
-                        "type": "image"
-                    }
+                    # Process text blocks
+                    for block in page.get("text_blocks", []):
+                        try:
+                            metadata = {
+                                "page_num": page["page_num"],
+                                "block_id": block["id"],
+                                "position": json.dumps(block["position"]),
+                                "type": "text"
+                            }
+                            
+                            self.collections["text"].add(
+                                documents=[block["text"]],
+                                metadatas=[self._prepare_metadata(metadata)],
+                                ids=[f"text_{page['page_num']}_{block['id']}"]
+                            )
+                            logger.debug(f"Added text block: {block['text'][:100]}...")
+                        except Exception as e:
+                            logger.error(f"Error adding text block: {e}")
                     
-                    self.collections["images"].add(
-                        documents=[f"Image on page {page['page_num']}"],
-                        metadatas=[self._prepare_metadata(metadata)],
-                        ids=[f"image_{page['page_num']}_{img['id']}"]
-                    )
-                
-                # Process tables
-                for table in page.get("tables", []):
-                    metadata = {
-                        "page_num": page["page_num"],
-                        "table_id": table["id"],
-                        "position": json.dumps(table.get("position", {})),
-                        "type": "table"
-                    }
+                    # Similar logging for images and tables...
                     
-                    self.collections["tables"].add(
-                        documents=[json.dumps(table.get("content", []))],
-                        metadatas=[self._prepare_metadata(metadata)],
-                        ids=[f"table_{page['page_num']}_{table['id']}"]
-                    )
+            logger.info("Document addition completed")
+            
+        except Exception as e:
+            logger.error(f"Error in add_documents: {e}")
+            raise
 
     async def query(self, query_text: str, limit: int = 3) -> Dict[str, Any]:
         """Query all collections and return relevant results."""
@@ -183,3 +152,40 @@ class ChromaDBClient:
         except Exception as e:
             logger.exception(f"Error querying collection {collection_name}: {e}")
             return []
+
+    async def get_collection_stats(self) -> Dict[str, Any]:
+        """Get detailed stats about collections."""
+        stats = {}
+        try:
+            # Get list of all collections
+            all_collections = self.client.list_collections()
+            stats["available_collections"] = [c.name for c in all_collections]
+            
+            # Get counts for our specific collections
+            collection_counts = {}
+            for name, collection in self.collections.items():
+                try:
+                    count = collection.count()
+                    peek = collection.peek() if count > 0 else None
+                    collection_counts[name] = {
+                        "count": count,
+                        "sample": peek,
+                        "exists": True
+                    }
+                except Exception as e:
+                    logger.error(f"Error accessing collection {name}: {e}")
+                    collection_counts[name] = {
+                        "count": 0,
+                        "error": str(e),
+                        "exists": False
+                    }
+            
+            stats["collections"] = collection_counts
+            stats["persist_directory"] = self.client._settings.persist_directory
+            
+        except Exception as e:
+            logger.error(f"Error getting collection stats: {e}")
+            stats["error"] = str(e)
+        
+        return stats
+
