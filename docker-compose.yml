@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma_db:/app/chroma_db
+      - ./app:/app/app:ro
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - CHROMA_DB_PATH=./chroma_db
+      - EMBEDDING_MODEL=all-MiniLM-L12-v2
+      - EMBEDDING_DEVICE=cpu
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    command: >
+      bash -c "
+        python -m spacy download en_core_web_sm &&
+        python -m app.main
+      "
+
+volumes:
+  chroma_db: 

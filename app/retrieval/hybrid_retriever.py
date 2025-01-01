@@ -1,5 +1,8 @@
 from typing import List, Dict, Any
 import numpy as np
+import logging
+
+logger = logging.getLogger(__name__)
 
 class HybridRetriever:
     def __init__(self, chroma_client):
@@ -21,10 +24,15 @@ class HybridRetriever:
                 limit=limit
             )
             
-            # Apply collection-specific weights
-            weighted_results = self._apply_weights(collection_results, collection)
-            results.extend(weighted_results)
+            if collection_results:  # Only process if we got results
+                # Apply collection-specific weights
+                weighted_results = self._apply_weights(collection_results, collection)
+                results.extend(weighted_results)
         
+        if not results:
+            logger.warning(f"No results found in any collection for query: {query}")
+            return []
+            
         # Sort by score and return top results
         sorted_results = sorted(results, key=lambda x: x["score"], reverse=True)
         return sorted_results[:limit]
