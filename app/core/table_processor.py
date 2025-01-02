@@ -58,7 +58,7 @@ class TableProcessor:
                     self.logger.info(
                         f"Successfully extracted table {idx} from page {page.number}:\n"
                         f"Dimensions: {table_content['num_rows']}x{table_content['num_cols']} cells\n"
-                        f"Content preview: {str(table_content['structured_content'])[:200]}..."
+                        f"Content preview: {str(table_content['structured_content'])}"
                     )
                 tables.append({
                     "id": f"table_{page.number}_{idx}",

@@ -13,6 +13,7 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
 from transformers import DetrImageProcessor, DetrForObjectDetection
+import json
 
 @dataclass
 class ImageMetadata:
@@ -59,20 +60,42 @@ class ImageProcessor:
     async def process_image(self, image: Image.Image) -> Dict[str, Any]:
         """Process a single image with enhanced capabilities"""
         try:
+            # Log initial image properties
+            self.logger.info(f"""
+Processing image with properties:
+- Size: {image.size}
+- Format: {image.format}
+- Mode: {image.mode}
+""")
+            
             # Validate and preprocess image
             if not self._validate_image(image):
+                self.logger.warning("Image validation failed")
                 return {"error": "Invalid image quality or format"}
 
             # Generate detailed caption
             caption = await self._generate_caption(image)
+            self.logger.info(f"Generated caption: {caption}")
             
             # Detect objects and regions of interest
             regions = await self._detect_objects(image)
+            self.logger.info(f"""
+Detected {len(regions)} objects/regions:
+{[f'- {r.label} (confidence: {r.score:.2f})' for r in regions]}
+""")
             
             # Analyze image quality and characteristics
             quality_metrics = self._analyze_quality(image)
+            self.logger.info(f"""
+Image quality metrics:
+- Brightness: {quality_metrics.get('brightness', 'N/A')}
+- Contrast: {quality_metrics.get('contrast', 'N/A')}
+- Sharpness: {quality_metrics.get('sharpness', 'N/A')}
+- Aspect Ratio: {quality_metrics.get('aspect_ratio', 'N/A')}
+- Resolution: {quality_metrics.get('resolution', 'N/A')}
+""")
             
-            return {
+            result = {
                 "caption": caption,
                 "regions": [r.__dict__ for r in regions],
                 "quality_metrics": quality_metrics,
@@ -80,9 +103,14 @@ class ImageProcessor:
                 "format": image.format,
                 "mode": image.mode
             }
+            
+            # Log final structured output
+            self.logger.info(f"Final processed image data:\n{json.dumps(result, indent=2)}")
+            
+            return result
 
         except Exception as e:
-            logger.error(f"Error processing image: {e}")
+            self.logger.error(f"Error processing image: {e}")
             return {"error": str(e)}
 
     def _validate_image(self, image: Image.Image) -> bool:
@@ -259,3 +287,27 @@ class ImageProcessor:
             f"Successfully processed {len(images)}/{len(image_list)} images on page {page.number}"
         )
         return images
+
+    def _format_metadata_for_logging(self, image_data: Dict[str, Any]) -> str:
+        """Format image metadata for logging purposes"""
+        return f"""
+Image Processing Results:
+------------------------
+Basic Information:
+- Dimensions: {image_data['size']}
+- Format: {image_data['format']}
+- Color Mode: {image_data['mode']}
+
+Caption:
+{image_data['caption']}
+
+Detected Objects ({len(image_data['regions'])}):
+{chr(10).join([f'- {r["label"]} (confidence: {r["score"]:.2f})' for r in image_data['regions']])}
+
+Quality Metrics:
+- Brightness: {image_data['quality_metrics'].get('brightness', 'N/A'):.2f}
+- Contrast: {image_data['quality_metrics'].get('contrast', 'N/A'):.2f}
+- Sharpness: {image_data['quality_metrics'].get('sharpness', 'N/A'):.2f}
+- Aspect Ratio: {image_data['quality_metrics'].get('aspect_ratio', 'N/A'):.2f}
+- Resolution: {image_data['quality_metrics'].get('resolution', 'N/A')}
+"""

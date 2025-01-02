@@ -5015,3 +5015,1117 @@ Content preview: [{0: 'NON-PARTICIPATING', 1: None, 2: None, 3: None, 4: None, 5
 2025-01-02 21:21:56 | INFO     | app.agents.pdf_agent:document_search:219 - Found 4 results in tables
 2025-01-02 21:21:56 | INFO     | app.agents.pdf_agent:document_search:219 - Found 2 results in images
 2025-01-02 21:21:56 | INFO     | app.agents.pdf_agent:answer_query:138 - Found 11 relevant documents
+2025-01-03 00:04:11 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: punkt
+2025-01-03 00:04:11 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: averaged_perceptron_tagger
+2025-01-03 00:04:11 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: universal_tagset
+2025-01-03 00:04:11 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: stopwords
+2025-01-03 00:04:11 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: wordnet
+2025-01-03 00:04:11 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: omw-1.4
+2025-01-03 00:04:19 | INFO     | app.core.table_processor:__init__:25 - Table processor initialized successfully
+2025-01-03 00:04:25 | INFO     | app.core.image_processor:__init__:53 - Image processing models loaded successfully on cpu
+2025-01-03 00:04:29 | INFO     | app.database.chroma_client:__init__:36 - Successfully initialized ChromaDB with collections: ['text', 'tables', 'images']
+2025-01-03 00:04:34 | INFO     | __main__:process_pdf:69 - Processing PDF file: al-cigna-dental-1500-policy (1).pdf
+2025-01-03 00:04:34 | INFO     | __main__:process_pdf:72 - File size: 245191 bytes
+2025-01-03 00:04:34 | INFO     | app.core.pdf_processor:process:109 - Opened PDF with 31 pages
+2025-01-03 00:04:34 | INFO     | app.core.pdf_processor:process:118 - Processing page 1
+2025-01-03 00:04:34 | INFO     | app.core.pdf_processor:process:129 - Found 16 text blocks on page 1
+2025-01-03 00:04:34 | INFO     | app.core.image_processor:process:207 - Processing page 0 for images
+2025-01-03 00:04:34 | INFO     | app.core.image_processor:process:212 - Found 2 raw images on page 0
+2025-01-03 00:04:34 | INFO     | app.core.image_processor:process:220 - Processing image 1/2 on page 0:
+Format: png
+Dimensions: 338x139
+Color space: 3
+2025-01-03 00:05:27 | INFO     | app.core.image_processor:process:245 - Successfully processed image 0 on page 0
+2025-01-03 00:05:27 | INFO     | app.core.image_processor:process:220 - Processing image 2/2 on page 0:
+Format: png
+Dimensions: 541x111
+Color space: 1
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:245 - Successfully processed image 1 on page 0
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 2/2 images on page 0
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:135 - Found 2 images on page 1
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 0 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 1 potential tables on page 0
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:45 - Processing table 1/1 on page 0:
+Position: (53.0, 451.0, 564.0, 516.0)
+Confidence: 1.00
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:58 - Successfully extracted table 0 from page 0:
+Dimensions: 4x19 cells
+Content preview: [{0: 'Guaranteed', 1: 'Renewable', 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None}, {0...
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 1 tables on page 0
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:141 - Found 1 tables on page 1
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 2
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 18 text blocks on page 2
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 1 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 1
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 1
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 1 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 1
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 1
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 3
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 7 text blocks on page 3
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 2 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 2
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 2
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 2 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 2
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 2
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 4
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 4 text blocks on page 4
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 3 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 3
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 3
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 3 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 3
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 3
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 5
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 15 text blocks on page 5
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 4 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 4
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 4
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 4 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 4
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 4
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 6
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 8 text blocks on page 6
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 5 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 5
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 5
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 5 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 5
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 5
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 7
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 18 text blocks on page 7
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 6 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 6
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 6
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 6 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 1 potential tables on page 6
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:45 - Processing table 1/1 on page 6:
+Position: (53.0, 191.0, 563.0, 572.0)
+Confidence: 0.99
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:58 - Successfully extracted table 0 from page 6:
+Dimensions: 25x20 cells
+Content preview: [{0: 'CIGNA', 1: 'DENTAL', 2: 'PREFERRED', 3: 'PROVIDER', 4: 'INSURANCE', 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 1...
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 1 tables on page 6
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:141 - Found 1 tables on page 7
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 8
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 34 text blocks on page 8
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 7 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 7
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 7
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 7 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 1 potential tables on page 7
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:45 - Processing table 1/1 on page 7:
+Position: (53.0, 72.0, 563.0, 516.0)
+Confidence: 10.72
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:58 - Successfully extracted table 0 from page 7:
+Dimensions: 30x10 cells
+Content preview: [{0: 'NON-PARTICIPATING', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'BENEFIT', 1: 'HIGHLIGHTS', 2: 'PARTICIPATING', 3: 'PROVIDERS', 4: None, 5: None, 6: Non...
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 1 tables on page 7
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:141 - Found 1 tables on page 8
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 9
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 32 text blocks on page 9
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 8 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 8
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 8
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 8 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 1 potential tables on page 8
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:45 - Processing table 1/1 on page 8:
+Position: (53.0, 83.0, 563.0, 436.0)
+Confidence: 10.57
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:58 - Successfully extracted table 0 from page 8:
+Dimensions: 26x11 cells
+Content preview: [{0: 'NON-PARTICIPATING', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'BENEFIT', 1: 'HIGHLIGHTS', 2: 'PARTICIPATING', 3: 'PROVIDERS', 4: None, 5: No...
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 1 tables on page 8
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:141 - Found 1 tables on page 9
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 10
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 17 text blocks on page 10
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 9 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 9
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 9
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 9 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 9
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 9
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 11
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 18 text blocks on page 11
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 10 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 10
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 10
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 10 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 10
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 10
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 12
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 29 text blocks on page 12
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 11 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 11
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 11
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 11 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 11
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 11
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 13
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 26 text blocks on page 13
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 12 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 12
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 12
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 12 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 12
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 12
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 14
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 26 text blocks on page 14
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 13 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 13
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 13
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 13 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 13
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 13
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 15
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 24 text blocks on page 15
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 14 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 14
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 14
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 14 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 14
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 14
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 16
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 20 text blocks on page 16
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 15 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 15
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 15
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 15 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 15
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 15
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 17
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 22 text blocks on page 17
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 16 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 16
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 16
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 16 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 16
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 16
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 18
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 30 text blocks on page 18
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 17 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 17
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 17
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 17 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 17
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 17
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 19
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 27 text blocks on page 19
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 18 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 18
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 18
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 18 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 18
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 18
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 20
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 6 text blocks on page 20
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 19 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 19
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 19
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 19 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 19
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 19
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 21
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 12 text blocks on page 21
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 20 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 20
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 20
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 20 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 20
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 20
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 22
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 8 text blocks on page 22
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 21 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 21
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 21
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 21 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 21
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 21
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 23
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 10 text blocks on page 23
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 22 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 22
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 22
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 22 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 22
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 22
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 24
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 6 text blocks on page 24
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 23 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 23
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 23
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 23 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 23
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 23
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 25
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 11 text blocks on page 25
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 24 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 24
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 24
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 24 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 24
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 24
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 26
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 14 text blocks on page 26
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 25 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 25
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 25
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 25 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 25
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 25
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 27
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 7 text blocks on page 27
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 26 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 26
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 26
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 26 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 26
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 26
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 28
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 4 text blocks on page 28
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 27 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 27
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 27
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 27 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 27
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 27
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 29
+2025-01-03 00:06:14 | INFO     | app.core.pdf_processor:process:129 - Found 7 text blocks on page 29
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:207 - Processing page 28 for images
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 28
+2025-01-03 00:06:14 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 28
+2025-01-03 00:06:14 | INFO     | app.core.table_processor:process:31 - Processing page 28 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 28
+2025-01-03 00:06:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 28
+2025-01-03 00:06:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 30
+2025-01-03 00:06:15 | INFO     | app.core.pdf_processor:process:129 - Found 3 text blocks on page 30
+2025-01-03 00:06:15 | INFO     | app.core.image_processor:process:207 - Processing page 29 for images
+2025-01-03 00:06:15 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 29
+2025-01-03 00:06:15 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 29
+2025-01-03 00:06:15 | INFO     | app.core.table_processor:process:31 - Processing page 29 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 29
+2025-01-03 00:06:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 29
+2025-01-03 00:06:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 31
+2025-01-03 00:06:15 | INFO     | app.core.pdf_processor:process:129 - Found 4 text blocks on page 31
+2025-01-03 00:06:15 | INFO     | app.core.image_processor:process:207 - Processing page 30 for images
+2025-01-03 00:06:15 | INFO     | app.core.image_processor:process:212 - Found 0 raw images on page 30
+2025-01-03 00:06:15 | INFO     | app.core.image_processor:process:258 - Successfully processed 0/0 images on page 30
+2025-01-03 00:06:15 | INFO     | app.core.table_processor:process:31 - Processing page 30 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:06:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 30
+2025-01-03 00:06:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 30
+2025-01-03 00:06:15 | INFO     | app.agents.pdf_agent:process_pdf:94 - Processed 37 documents from PDF
+2025-01-03 00:06:16 | INFO     | app.database.chroma_client:add_documents:76 - Added 31 documents to text collection
+2025-01-03 00:06:16 | INFO     | app.database.chroma_client:add_documents:76 - Added 2 documents to images collection
+2025-01-03 00:06:16 | INFO     | app.database.chroma_client:add_documents:76 - Added 4 documents to tables collection
+2025-01-03 00:06:16 | INFO     | __main__:process_pdf:78 - PDF processing completed successfully
+2025-01-03 00:08:48 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: punkt
+2025-01-03 00:08:48 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: averaged_perceptron_tagger
+2025-01-03 00:08:48 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: universal_tagset
+2025-01-03 00:08:48 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: stopwords
+2025-01-03 00:08:48 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: wordnet
+2025-01-03 00:08:48 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: omw-1.4
+2025-01-03 00:08:57 | INFO     | app.core.table_processor:__init__:25 - Table processor initialized successfully
+2025-01-03 00:09:04 | INFO     | app.core.image_processor:__init__:54 - Image processing models loaded successfully on cpu
+2025-01-03 00:09:08 | INFO     | app.database.chroma_client:__init__:37 - Successfully initialized ChromaDB with collections: ['text', 'tables', 'images']
+2025-01-03 00:09:13 | INFO     | __main__:process_pdf:69 - Processing PDF file: al-cigna-dental-1500-policy (1).pdf
+2025-01-03 00:09:13 | INFO     | __main__:process_pdf:72 - File size: 245191 bytes
+2025-01-03 00:09:13 | INFO     | app.core.pdf_processor:process:109 - Opened PDF with 31 pages
+2025-01-03 00:09:13 | INFO     | app.core.pdf_processor:process:118 - Processing page 1
+2025-01-03 00:09:13 | INFO     | app.core.pdf_processor:process:129 - Found 16 text blocks on page 1
+2025-01-03 00:09:13 | INFO     | app.core.image_processor:process:235 - Processing page 0 for images
+2025-01-03 00:09:13 | INFO     | app.core.image_processor:process:240 - Found 2 raw images on page 0
+2025-01-03 00:09:13 | INFO     | app.core.image_processor:process:248 - Processing image 1/2 on page 0:
+Format: png
+Dimensions: 338x139
+Color space: 3
+2025-01-03 00:09:14 | INFO     | app.core.image_processor:process_image:64 - 
+Processing image with properties:
+- Size: (338, 139)
+- Format: PNG
+- Mode: RGB
+
+2025-01-03 00:09:58 | INFO     | app.core.image_processor:process_image:78 - Generated caption: julia m huggins, president
+2025-01-03 00:10:00 | INFO     | app.core.image_processor:process_image:82 - 
+Detected 0 objects/regions:
+[]
+
+2025-01-03 00:10:00 | INFO     | app.core.image_processor:process_image:89 - 
+Image quality metrics:
+- Brightness: 241.79052970641237
+- Contrast: 49.061546779584965
+- Sharpness: 0.0
+- Aspect Ratio: 2.431654676258993
+- Resolution: 46982
+
+2025-01-03 00:10:00 | INFO     | app.core.image_processor:process_image:108 - Final processed image data:
+{
+  "caption": "julia m huggins, president",
+  "regions": [],
+  "quality_metrics": {
+    "brightness": 241.79052970641237,
+    "contrast": 49.061546779584965,
+    "sharpness": 0.0,
+    "aspect_ratio": 2.431654676258993,
+    "resolution": 46982
+  },
+  "size": [
+    338,
+    139
+  ],
+  "format": "PNG",
+  "mode": "RGB"
+}
+2025-01-03 00:10:00 | INFO     | app.core.image_processor:process:273 - Successfully processed image 0 on page 0
+2025-01-03 00:10:00 | INFO     | app.core.image_processor:process:248 - Processing image 2/2 on page 0:
+Format: png
+Dimensions: 541x111
+Color space: 1
+2025-01-03 00:10:00 | INFO     | app.core.image_processor:process_image:64 - 
+Processing image with properties:
+- Size: (541, 111)
+- Format: PNG
+- Mode: RGB
+
+2025-01-03 00:10:49 | INFO     | app.core.image_processor:process_image:78 - Generated caption: a black and white image of a handwriting that says anna kirstein
+2025-01-03 00:10:50 | INFO     | app.core.image_processor:process_image:82 - 
+Detected 0 objects/regions:
+[]
+
+2025-01-03 00:10:50 | INFO     | app.core.image_processor:process_image:89 - 
+Image quality metrics:
+- Brightness: 232.70165359444474
+- Contrast: 64.75610393661081
+- Sharpness: 0.0
+- Aspect Ratio: 4.873873873873874
+- Resolution: 60051
+
+2025-01-03 00:10:50 | INFO     | app.core.image_processor:process_image:108 - Final processed image data:
+{
+  "caption": "a black and white image of a handwriting that says anna kirstein",
+  "regions": [],
+  "quality_metrics": {
+    "brightness": 232.70165359444474,
+    "contrast": 64.75610393661081,
+    "sharpness": 0.0,
+    "aspect_ratio": 4.873873873873874,
+    "resolution": 60051
+  },
+  "size": [
+    541,
+    111
+  ],
+  "format": "PNG",
+  "mode": "RGB"
+}
+2025-01-03 00:10:50 | INFO     | app.core.image_processor:process:273 - Successfully processed image 1 on page 0
+2025-01-03 00:10:50 | INFO     | app.core.image_processor:process:286 - Successfully processed 2/2 images on page 0
+2025-01-03 00:10:50 | INFO     | app.core.pdf_processor:process:135 - Found 2 images on page 1
+2025-01-03 00:10:50 | INFO     | app.core.table_processor:process:31 - Processing page 0 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:50 | INFO     | app.core.table_processor:process:40 - Found 1 potential tables on page 0
+2025-01-03 00:10:50 | INFO     | app.core.table_processor:process:45 - Processing table 1/1 on page 0:
+Position: (53.0, 451.0, 564.0, 516.0)
+Confidence: 1.00
+2025-01-03 00:10:50 | INFO     | app.core.table_processor:process:58 - Successfully extracted table 0 from page 0:
+Dimensions: 4x19 cells
+Content preview: [{0: 'Guaranteed', 1: 'Renewable', 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None}, {0...
+2025-01-03 00:10:50 | INFO     | app.core.table_processor:process:76 - Successfully processed 1 tables on page 0
+2025-01-03 00:10:50 | INFO     | app.core.pdf_processor:process:141 - Found 1 tables on page 1
+2025-01-03 00:10:50 | INFO     | app.core.pdf_processor:process:118 - Processing page 2
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 18 text blocks on page 2
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 1 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 1
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 1
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 1 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 1
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 1
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 3
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 7 text blocks on page 3
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 2 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 2
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 2
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 2 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 2
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 2
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 4
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 4 text blocks on page 4
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 3 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 3
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 3
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 3 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 3
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 3
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 5
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 15 text blocks on page 5
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 4 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 4
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 4
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 4 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 4
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 4
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 6
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 8 text blocks on page 6
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 5 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 5
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 5
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 5 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 5
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 5
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 7
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 18 text blocks on page 7
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 6 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 6
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 6
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 6 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 1 potential tables on page 6
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:45 - Processing table 1/1 on page 6:
+Position: (53.0, 191.0, 563.0, 572.0)
+Confidence: 0.99
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:58 - Successfully extracted table 0 from page 6:
+Dimensions: 25x20 cells
+Content preview: [{0: 'CIGNA', 1: 'DENTAL', 2: 'PREFERRED', 3: 'PROVIDER', 4: 'INSURANCE', 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 1...
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 1 tables on page 6
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:141 - Found 1 tables on page 7
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 8
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 34 text blocks on page 8
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 7 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 7
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 7
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 7 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 1 potential tables on page 7
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:45 - Processing table 1/1 on page 7:
+Position: (53.0, 72.0, 563.0, 516.0)
+Confidence: 10.72
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:58 - Successfully extracted table 0 from page 7:
+Dimensions: 30x10 cells
+Content preview: [{0: 'NON-PARTICIPATING', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'BENEFIT', 1: 'HIGHLIGHTS', 2: 'PARTICIPATING', 3: 'PROVIDERS', 4: None, 5: None, 6: Non...
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 1 tables on page 7
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:141 - Found 1 tables on page 8
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 9
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 32 text blocks on page 9
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 8 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 8
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 8
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 8 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 1 potential tables on page 8
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:45 - Processing table 1/1 on page 8:
+Position: (53.0, 83.0, 563.0, 436.0)
+Confidence: 10.57
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:58 - Successfully extracted table 0 from page 8:
+Dimensions: 26x11 cells
+Content preview: [{0: 'NON-PARTICIPATING', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'BENEFIT', 1: 'HIGHLIGHTS', 2: 'PARTICIPATING', 3: 'PROVIDERS', 4: None, 5: No...
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 1 tables on page 8
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:141 - Found 1 tables on page 9
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 10
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 17 text blocks on page 10
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 9 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 9
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 9
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 9 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 9
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 9
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 11
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 18 text blocks on page 11
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 10 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 10
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 10
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 10 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 10
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 10
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 12
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 29 text blocks on page 12
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 11 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 11
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 11
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 11 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 11
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 11
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 13
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 26 text blocks on page 13
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 12 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 12
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 12
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 12 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 12
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 12
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 14
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 26 text blocks on page 14
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 13 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 13
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 13
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 13 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 13
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 13
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 15
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 24 text blocks on page 15
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 14 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 14
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 14
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 14 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 14
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 14
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 16
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 20 text blocks on page 16
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 15 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 15
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 15
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 15 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 15
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 15
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 17
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 22 text blocks on page 17
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 16 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 16
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 16
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 16 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 16
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 16
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 18
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 30 text blocks on page 18
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 17 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 17
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 17
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 17 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 17
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 17
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 19
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 27 text blocks on page 19
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 18 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 18
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 18
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 18 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 18
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 18
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 20
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 6 text blocks on page 20
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 19 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 19
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 19
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 19 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 19
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 19
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 21
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 12 text blocks on page 21
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 20 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 20
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 20
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 20 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 20
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 20
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 22
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 8 text blocks on page 22
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 21 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 21
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 21
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 21 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 21
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 21
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 23
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 10 text blocks on page 23
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 22 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 22
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 22
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 22 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 22
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 22
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 24
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 6 text blocks on page 24
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 23 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 23
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 23
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 23 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 23
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 23
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 25
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 11 text blocks on page 25
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 24 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 24
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 24
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 24 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 24
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 24
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 26
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 14 text blocks on page 26
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 25 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 25
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 25
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 25 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 25
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 25
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 27
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 7 text blocks on page 27
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 26 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 26
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 26
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 26 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 26
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 26
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 28
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 4 text blocks on page 28
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 27 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 27
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 27
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 27 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 27
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 27
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 29
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 7 text blocks on page 29
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 28 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 28
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 28
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 28 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 28
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 28
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 30
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 3 text blocks on page 30
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 29 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 29
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 29
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 29 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 29
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 29
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:118 - Processing page 31
+2025-01-03 00:10:51 | INFO     | app.core.pdf_processor:process:129 - Found 4 text blocks on page 31
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:235 - Processing page 30 for images
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 30
+2025-01-03 00:10:51 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 30
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:31 - Processing page 30 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 30
+2025-01-03 00:10:51 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 30
+2025-01-03 00:10:51 | INFO     | app.agents.pdf_agent:process_pdf:94 - Processed 37 documents from PDF
+2025-01-03 00:10:54 | INFO     | app.database.chroma_client:add_documents:88 - Added 31 documents to text collection
+2025-01-03 00:10:54 | INFO     | app.database.chroma_client:add_documents:53 - 
+Processing 2 image documents:
+[
+  {
+    "id": "image_1240c91e-38fe-40f7-9f63-e4655f2d8c59",
+    "caption": "julia m huggins, president",
+    "metadata": {
+      "page": 0,
+      "source": "image"
+    },
+    "page": 0,
+    "position": "unknown"
+  },
+  {
+    "id": "image_dcb03703-e106-4f4e-8712-85c04e9fa73b",
+    "caption": "a black and white image of a handwriting that says anna kirstein",
+    "metadata": {
+      "page": 0,
+      "source": "image"
+    },
+    "page": 0,
+    "position": "unknown"
+  }
+]
+
+2025-01-03 00:10:54 | INFO     | app.database.chroma_client:add_documents:88 - Added 2 documents to images collection
+2025-01-03 00:10:54 | INFO     | app.database.chroma_client:add_documents:88 - Added 4 documents to tables collection
+2025-01-03 00:10:54 | INFO     | __main__:process_pdf:78 - PDF processing completed successfully
+2025-01-03 00:12:11 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: punkt
+2025-01-03 00:12:11 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: averaged_perceptron_tagger
+2025-01-03 00:12:11 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: universal_tagset
+2025-01-03 00:12:11 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: stopwords
+2025-01-03 00:12:11 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: wordnet
+2025-01-03 00:12:11 | INFO     | __main__:initialize_nltk:29 - Successfully downloaded NLTK package: omw-1.4
+2025-01-03 00:12:19 | INFO     | app.core.table_processor:__init__:25 - Table processor initialized successfully
+2025-01-03 00:12:27 | INFO     | app.core.image_processor:__init__:54 - Image processing models loaded successfully on cpu
+2025-01-03 00:12:31 | INFO     | app.database.chroma_client:__init__:37 - Successfully initialized ChromaDB with collections: ['text', 'tables', 'images']
+2025-01-03 00:12:35 | INFO     | __main__:process_pdf:69 - Processing PDF file: al-cigna-dental-1500-policy (1).pdf
+2025-01-03 00:12:35 | INFO     | __main__:process_pdf:72 - File size: 245191 bytes
+2025-01-03 00:12:35 | INFO     | app.core.pdf_processor:process:109 - Opened PDF with 31 pages
+2025-01-03 00:12:35 | INFO     | app.core.pdf_processor:process:118 - Processing page 1
+2025-01-03 00:12:35 | INFO     | app.core.pdf_processor:process:129 - Found 16 text blocks on page 1
+2025-01-03 00:12:35 | INFO     | app.core.image_processor:process:235 - Processing page 0 for images
+2025-01-03 00:12:35 | INFO     | app.core.image_processor:process:240 - Found 2 raw images on page 0
+2025-01-03 00:12:35 | INFO     | app.core.image_processor:process:248 - Processing image 1/2 on page 0:
+Format: png
+Dimensions: 338x139
+Color space: 3
+2025-01-03 00:12:35 | INFO     | app.core.image_processor:process_image:64 - 
+Processing image with properties:
+- Size: (338, 139)
+- Format: PNG
+- Mode: RGB
+
+2025-01-03 00:13:17 | INFO     | app.core.image_processor:process_image:78 - Generated caption: julia m huggins, president
+2025-01-03 00:13:19 | INFO     | app.core.image_processor:process_image:82 - 
+Detected 0 objects/regions:
+[]
+
+2025-01-03 00:13:19 | INFO     | app.core.image_processor:process_image:89 - 
+Image quality metrics:
+- Brightness: 241.79052970641237
+- Contrast: 49.061546779584965
+- Sharpness: 0.0
+- Aspect Ratio: 2.431654676258993
+- Resolution: 46982
+
+2025-01-03 00:13:19 | INFO     | app.core.image_processor:process_image:108 - Final processed image data:
+{
+  "caption": "julia m huggins, president",
+  "regions": [],
+  "quality_metrics": {
+    "brightness": 241.79052970641237,
+    "contrast": 49.061546779584965,
+    "sharpness": 0.0,
+    "aspect_ratio": 2.431654676258993,
+    "resolution": 46982
+  },
+  "size": [
+    338,
+    139
+  ],
+  "format": "PNG",
+  "mode": "RGB"
+}
+2025-01-03 00:13:19 | INFO     | app.core.image_processor:process:273 - Successfully processed image 0 on page 0
+2025-01-03 00:13:19 | INFO     | app.core.image_processor:process:248 - Processing image 2/2 on page 0:
+Format: png
+Dimensions: 541x111
+Color space: 1
+2025-01-03 00:13:19 | INFO     | app.core.image_processor:process_image:64 - 
+Processing image with properties:
+- Size: (541, 111)
+- Format: PNG
+- Mode: RGB
+
+2025-01-03 00:14:13 | INFO     | app.core.image_processor:process_image:78 - Generated caption: a black and white image of a handwriting that says anna kirstein
+2025-01-03 00:14:14 | INFO     | app.core.image_processor:process_image:82 - 
+Detected 0 objects/regions:
+[]
+
+2025-01-03 00:14:14 | INFO     | app.core.image_processor:process_image:89 - 
+Image quality metrics:
+- Brightness: 232.70165359444474
+- Contrast: 64.75610393661081
+- Sharpness: 0.0
+- Aspect Ratio: 4.873873873873874
+- Resolution: 60051
+
+2025-01-03 00:14:14 | INFO     | app.core.image_processor:process_image:108 - Final processed image data:
+{
+  "caption": "a black and white image of a handwriting that says anna kirstein",
+  "regions": [],
+  "quality_metrics": {
+    "brightness": 232.70165359444474,
+    "contrast": 64.75610393661081,
+    "sharpness": 0.0,
+    "aspect_ratio": 4.873873873873874,
+    "resolution": 60051
+  },
+  "size": [
+    541,
+    111
+  ],
+  "format": "PNG",
+  "mode": "RGB"
+}
+2025-01-03 00:14:14 | INFO     | app.core.image_processor:process:273 - Successfully processed image 1 on page 0
+2025-01-03 00:14:14 | INFO     | app.core.image_processor:process:286 - Successfully processed 2/2 images on page 0
+2025-01-03 00:14:14 | INFO     | app.core.pdf_processor:process:135 - Found 2 images on page 1
+2025-01-03 00:14:14 | INFO     | app.core.table_processor:process:31 - Processing page 0 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:14 | INFO     | app.core.table_processor:process:40 - Found 1 potential tables on page 0
+2025-01-03 00:14:14 | INFO     | app.core.table_processor:process:45 - Processing table 1/1 on page 0:
+Position: (53.0, 451.0, 564.0, 516.0)
+Confidence: 1.00
+2025-01-03 00:14:14 | INFO     | app.core.table_processor:process:58 - Successfully extracted table 0 from page 0:
+Dimensions: 4x19 cells
+Content preview: [{0: 'Guaranteed', 1: 'Renewable', 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None}, {0: 'This', 1: 'Policy', 2: 'is', 3: 'monthly', 4: 'or', 5: 'quarterly', 6: 'dental', 7: 'coverage', 8: 'subject', 9: 'to', 10: 'continual', 11: 'payment', 12: 'by', 13: 'the', 14: 'Insured', 15: 'Person.', 16: None, 17: None, 18: None}, {0: 'Cigna', 1: 'will', 2: 'renew', 3: 'this', 4: 'Policy', 5: 'except', 6: 'for', 7: 'the', 8: 'specific', 9: 'events', 10: 'stated', 11: 'in', 12: 'the', 13: 'Policy.', 14: 'Coverage', 15: 'under', 16: 'this', 17: 'Policy', 18: 'is'}, {0: 'effective', 1: 'at', 2: '12:01', 3: 'a.m.', 4: 'Eastern', 5: 'time', 6: 'on', 7: 'the', 8: 'Effective', 9: 'Date', 10: 'shown', 11: 'on', 12: 'the', 13: 'Policy’s', 14: 'specification', 15: 'page.', 16: None, 17: None, 18: None}]
+2025-01-03 00:14:14 | INFO     | app.core.table_processor:process:76 - Successfully processed 1 tables on page 0
+2025-01-03 00:14:14 | INFO     | app.core.pdf_processor:process:141 - Found 1 tables on page 1
+2025-01-03 00:14:14 | INFO     | app.core.pdf_processor:process:118 - Processing page 2
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 18 text blocks on page 2
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 1 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 1
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 1
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 1 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 1
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 1
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 3
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 7 text blocks on page 3
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 2 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 2
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 2
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 2 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 2
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 2
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 4
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 4 text blocks on page 4
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 3 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 3
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 3
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 3 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 3
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 3
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 5
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 15 text blocks on page 5
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 4 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 4
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 4
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 4 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 4
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 4
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 6
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 8 text blocks on page 6
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 5 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 5
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 5
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 5 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 5
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 5
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 7
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 18 text blocks on page 7
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 6 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 6
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 6
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 6 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 1 potential tables on page 6
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:45 - Processing table 1/1 on page 6:
+Position: (53.0, 191.0, 563.0, 572.0)
+Confidence: 0.99
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:58 - Successfully extracted table 0 from page 6:
+Dimensions: 25x20 cells
+Content preview: [{0: 'CIGNA', 1: 'DENTAL', 2: 'PREFERRED', 3: 'PROVIDER', 4: 'INSURANCE', 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'The', 1: 'Schedule', 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'For', 1: 'You', 2: 'and', 3: 'Your', 4: 'Dependents', 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'The', 1: 'Schedule', 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'If', 1: 'You', 2: 'select', 3: 'a', 4: 'Contracting', 5: 'Provider,', 6: 'Your', 7: 'cost', 8: 'will', 9: 'be', 10: 'less', 11: 'than', 12: 'if', 13: 'You', 14: 'select', 15: 'a', 16: 'Non-Contracting', 17: 'Provider.', 18: None, 19: None}, {0: 'Emergency', 1: 'Services', 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'The', 1: 'Benefit', 2: 'Percentage', 3: 'payable', 4: 'for', 5: 'Emergency', 6: 'Services', 7: 'charges', 8: 'made', 9: 'by', 10: 'a', 11: 'Non-Participating', 12: 'Provider', 13: 'is', 14: 'the', 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'same', 1: 'Benefit', 2: 'Percentage', 3: 'as', 4: 'for', 5: 'Participating', 6: 'Provider', 7: 'Charges.', 8: 'Dental', 9: 'Emergency', 10: 'services', 11: 'are', 12: 'required', 13: None, 14: None, 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'immediately', 1: 'to', 2: 'either', 3: 'alleviate', 4: 'pain', 5: 'or', 6: 'to', 7: 'treat', 8: 'the', 9: 'sudden', 10: 'onset', 11: 'of', 12: 'an', 13: 'acute', 14: 'dental', 15: 'condition.', 16: 'These', 17: 'are', 18: 'usually', 19: None}, {0: 'minor', 1: 'procedures', 2: 'performed', 3: 'in', 4: 'response', 5: 'to', 6: 'serious', 7: 'symptoms,', 8: 'which', 9: 'temporarily', 10: 'relieve', 11: 'significant', 12: 'pain,', 13: 'but', 14: 'do', 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'not', 1: 'effect', 2: 'a', 3: 'definitive', 4: 'cure,', 5: 'and', 6: 'which,', 7: 'if', 8: 'not', 9: 'rendered,', 10: 'will', 11: 'likely', 12: 'result', 13: 'in', 14: 'a', 15: 'more', 16: 'serious', 17: 'dental', 18: 'or', 19: 'medical'}, {0: 'complication.', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'Deductibles', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'Deductibles', 1: 'are', 2: 'expenses', 3: 'to', 4: 'be', 5: 'paid', 6: 'by', 7: 'You', 8: 'or', 9: 'Your', 10: 'Dependent.', 11: 'Deductibles', 12: 'are', 13: 'in', 14: 'addition', 15: 'to', 16: 'any', 17: None, 18: None, 19: None}, {0: 'Coinsurance.', 1: 'Once', 2: 'the', 3: 'Deductible', 4: 'maximum', 5: 'in', 6: 'The', 7: 'Schedule', 8: 'has', 9: 'been', 10: 'reached', 11: 'You', 12: 'and', 13: 'Your', 14: 'family', 15: 'need', 16: 'not', 17: None, 18: None, 19: None}, {0: 'satisfy', 1: 'any', 2: 'further', 3: 'dental', 4: 'deductible', 5: 'for', 6: 'the', 7: 'rest', 8: 'of', 9: 'that', 10: 'year.', 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'Participating', 1: 'Provider', 2: 'Payment', 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'Participating', 1: 'Provider', 2: 'services', 3: 'are', 4: 'paid', 5: 'based', 6: 'on', 7: 'the', 8: 'Contracted', 9: 'Fee', 10: 'agreed', 11: 'upon', 12: 'by', 13: 'the', 14: 'provider', 15: 'and', 16: 'CHLIC.', 17: None, 18: None, 19: None}, {0: 'Non-Participating', 1: 'Provider', 2: 'Payment', 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'Non-Participating', 1: 'Provider', 2: 'services', 3: 'are', 4: 'paid', 5: 'based', 6: 'on', 7: 'the', 8: 'Contracted', 9: 'Fee.', 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'Simultaneous', 1: 'Accumulation', 2: 'of', 3: 'Amounts', 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'Expenses', 1: 'incurred', 2: 'for', 3: 'either', 4: 'Participating', 5: 'or', 6: 'non-Participating', 7: 'Provider', 8: 'charges', 9: 'will', 10: 'be', 11: 'used', 12: 'to', 13: 'satisfy', 14: 'both', 15: 'the', 16: None, 17: None, 18: None, 19: None}, {0: 'Participating', 1: 'and', 2: 'non-Participating', 3: 'Provider', 4: 'Deductibles', 5: 'shown', 6: 'in', 7: 'the', 8: 'Schedule.', 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'Benefits', 1: 'paid', 2: 'for', 3: 'Participating', 4: 'and', 5: 'non-Participating', 6: 'Provider', 7: 'services', 8: 'will', 9: 'be', 10: 'applied', 11: 'toward', 12: 'both', 13: 'the', 14: None, 15: None, 16: None, 17: None, 18: None, 19: None}, {0: 'Participating', 1: 'and', 2: 'non-Participating', 3: 'Provider', 4: 'maximum', 5: 'shown', 6: 'in', 7: 'the', 8: 'Schedule.', 9: None, 10: None, 11: None, 12: None, 13: None, 14: None, 15: None, 16: None, 17: None, 18: None, 19: None}]
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 1 tables on page 6
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:141 - Found 1 tables on page 7
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 8
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 34 text blocks on page 8
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 7 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 7
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 7
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 7 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 1 potential tables on page 7
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:45 - Processing table 1/1 on page 7:
+Position: (53.0, 72.0, 563.0, 516.0)
+Confidence: 10.72
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:58 - Successfully extracted table 0 from page 7:
+Dimensions: 30x10 cells
+Content preview: [{0: 'NON-PARTICIPATING', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'BENEFIT', 1: 'HIGHLIGHTS', 2: 'PARTICIPATING', 3: 'PROVIDERS', 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'PROVIDERS', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'Classes', 1: 'I,', 2: 'II,', 3: 'III', 4: 'Calendar', 5: 'Year', 6: '$1,500', 7: 'per', 8: 'person', 9: None}, {0: 'Maximum', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'Class', 1: 'IV', 2: 'Lifetime', 3: 'Maximum', 4: '$1,000', 5: 'per', 6: 'person', 7: None, 8: None, 9: None}, {0: 'Calendar', 1: 'Year', 2: 'Deductible', 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: '$50', 1: 'per', 2: 'person', 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'Individual', 1: 'Not', 2: 'Applicable', 3: 'to', 4: 'Class', 5: 'I', 6: None, 7: None, 8: None, 9: None}, {0: 'Family', 1: 'Maximum', 2: '$150', 3: 'per', 4: 'family', 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'Not', 1: 'Applicable', 2: 'to', 3: 'Class', 4: 'I', 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'Lifetime', 1: 'Class', 2: 'IV', 3: 'Deductible', 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: '$50', 1: 'per', 2: 'person', 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'Class', 1: 'I', 2: 'The', 3: 'Percentage', 4: 'of', 5: 'Covered', 6: 'The', 7: 'Percentage', 8: 'of', 9: 'Covered'}, {0: 'Expenses', 1: 'the', 2: 'Plan', 3: 'Pays', 4: 'Expenses', 5: 'the', 6: 'Plan', 7: 'Pays', 8: None, 9: None}, {0: 'Preventive', 1: 'Care', 2: '100%', 3: '100%', 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'Oral', 1: 'Exams', 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'Routine', 1: 'Cleanings', 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'Routine', 1: 'X-rays', 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'Fluoride', 1: 'Application', 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'Sealants', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'Space', 1: 'Maintainers', 2: '(non-', 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'orthodontic)', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'Class', 1: 'II', 2: 'The', 3: 'Percentage', 4: 'of', 5: 'Covered', 6: 'The', 7: 'Percentage', 8: 'of', 9: 'Covered'}, {0: 'Expenses', 1: 'the', 2: 'Plan', 3: 'Pays', 4: 'Expenses', 5: 'the', 6: 'Plan', 7: 'Pays', 8: None, 9: None}, {0: 'Basic', 1: 'Restorative', 2: '80%', 3: 'after', 4: 'plan', 5: 'deductible', 6: '80%', 7: 'after', 8: 'plan', 9: 'deductible'}, {0: 'Fillings', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'Non-Routine', 1: 'X-rays', 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'Emergency', 1: 'Care', 2: 'to', 3: 'Relieve', 4: 'Pain', 5: None, 6: None, 7: None, 8: None, 9: None}, {0: 'Oral', 1: 'Surgery,', 2: 'Simple', 3: 'Extractions', 4: None, 5: None, 6: None, 7: None, 8: None, 9: None}]
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 1 tables on page 7
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:141 - Found 1 tables on page 8
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 9
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 32 text blocks on page 9
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 8 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 8
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 8
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 8 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 1 potential tables on page 8
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:45 - Processing table 1/1 on page 8:
+Position: (53.0, 83.0, 563.0, 436.0)
+Confidence: 10.57
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:58 - Successfully extracted table 0 from page 8:
+Dimensions: 26x11 cells
+Content preview: [{0: 'NON-PARTICIPATING', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'BENEFIT', 1: 'HIGHLIGHTS', 2: 'PARTICIPATING', 3: 'PROVIDERS', 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'PROVIDERS', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Class', 1: 'III', 2: 'The', 3: 'Percentage', 4: 'of', 5: 'Covered', 6: 'The', 7: 'Percentage', 8: 'of', 9: 'Covered', 10: None}, {0: 'Expenses', 1: 'the', 2: 'Plan', 3: 'Pays', 4: 'Expenses', 5: 'the', 6: 'Plan', 7: 'Pays', 8: None, 9: None, 10: None}, {0: 'Major', 1: 'Restorative', 2: '50%', 3: 'after', 4: 'plan', 5: 'deductible', 6: '50%', 7: 'after', 8: 'plan', 9: 'deductible', 10: None}, {0: 'Crowns', 1: '/', 2: 'Inlays', 3: '/', 4: 'Onlays', 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Root', 1: 'Canal', 2: 'Therapy', 3: '/', 4: 'Endodontics', 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Minor', 1: 'Periodontics', 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Major', 1: 'Periodontics', 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Oral', 1: 'Surgery,', 2: 'All', 3: 'Except', 4: 'Simple', 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Extractions', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Surgical', 1: 'Extraction', 2: 'of', 3: 'Impacted', 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Teeth', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Relines,', 1: 'Rebases,', 2: 'and', 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Adjustments', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Repairs', 1: '-', 2: 'Bridges,', 3: 'Crowns,', 4: 'and', 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Inlays', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Repairs', 1: '–', 2: 'Dentures', 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Anesthetics', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Dentures', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Bridges', 1: None, 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}, {0: 'Class', 1: 'IV', 2: 'The', 3: 'Percentage', 4: 'of', 5: 'Covered', 6: 'The', 7: 'Percentage', 8: 'of', 9: 'Covered', 10: None}, {0: 'Expenses', 1: 'the', 2: 'Plan', 3: 'Pays', 4: 'Expenses', 5: 'the', 6: 'Plan', 7: 'Pays', 8: None, 9: None, 10: None}, {0: 'Orthodontia', 1: '50%', 2: 'after', 3: 'separate', 4: 'Class', 5: 'IV', 6: '50%', 7: 'after', 8: 'separate', 9: 'Class', 10: 'IV'}, {0: 'deductible', 1: 'deductible', 2: None, 3: None, 4: None, 5: None, 6: None, 7: None, 8: None, 9: None, 10: None}]
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 1 tables on page 8
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:141 - Found 1 tables on page 9
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 10
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 17 text blocks on page 10
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 9 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 9
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 9
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 9 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 9
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 9
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 11
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 18 text blocks on page 11
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 10 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 10
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 10
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 10 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 10
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 10
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 12
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 29 text blocks on page 12
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 11 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 11
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 11
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 11 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 11
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 11
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 13
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 26 text blocks on page 13
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 12 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 12
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 12
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 12 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 12
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 12
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 14
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 26 text blocks on page 14
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 13 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 13
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 13
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 13 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 13
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 13
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 15
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 24 text blocks on page 15
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 14 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 14
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 14
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 14 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 14
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 14
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 16
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 20 text blocks on page 16
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 15 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 15
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 15
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 15 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 15
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 15
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 17
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 22 text blocks on page 17
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 16 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 16
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 16
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 16 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 16
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 16
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 18
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 30 text blocks on page 18
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 17 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 17
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 17
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 17 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 17
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 17
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 19
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 27 text blocks on page 19
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 18 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 18
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 18
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 18 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 18
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 18
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 20
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 6 text blocks on page 20
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 19 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 19
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 19
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 19 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 19
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 19
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 21
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 12 text blocks on page 21
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 20 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 20
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 20
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 20 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 20
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 20
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 22
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 8 text blocks on page 22
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 21 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 21
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 21
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 21 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 21
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 21
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 23
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 10 text blocks on page 23
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 22 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 22
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 22
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 22 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 22
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 22
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 24
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 6 text blocks on page 24
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 23 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 23
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 23
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 23 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 23
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 23
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 25
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 11 text blocks on page 25
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 24 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 24
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 24
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 24 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 24
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 24
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 26
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 14 text blocks on page 26
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 25 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 25
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 25
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 25 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 25
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 25
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 27
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 7 text blocks on page 27
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 26 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 26
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 26
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 26 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 26
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 26
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 28
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 4 text blocks on page 28
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 27 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 27
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 27
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 27 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 27
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 27
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 29
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 7 text blocks on page 29
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 28 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 28
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 28
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 28 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 28
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 28
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 30
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 3 text blocks on page 30
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 29 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 29
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 29
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 29 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 29
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 29
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:118 - Processing page 31
+2025-01-03 00:14:15 | INFO     | app.core.pdf_processor:process:129 - Found 4 text blocks on page 31
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:235 - Processing page 30 for images
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:240 - Found 0 raw images on page 30
+2025-01-03 00:14:15 | INFO     | app.core.image_processor:process:286 - Successfully processed 0/0 images on page 30
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:31 - Processing page 30 for table detection. Page size: Rect(0.0, 0.0, 612.0, 792.0)
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:40 - Found 0 potential tables on page 30
+2025-01-03 00:14:15 | INFO     | app.core.table_processor:process:76 - Successfully processed 0 tables on page 30
+2025-01-03 00:14:15 | INFO     | app.agents.pdf_agent:process_pdf:94 - Processed 37 documents from PDF
+2025-01-03 00:14:18 | INFO     | app.database.chroma_client:add_documents:88 - Added 31 documents to text collection
+2025-01-03 00:14:18 | INFO     | app.database.chroma_client:add_documents:53 - 
+Processing 2 image documents:
+[
+  {
+    "id": "image_0f240b64-38b1-4a88-8115-2ddeac359b9d",
+    "caption": "julia m huggins, president",
+    "metadata": {
+      "page": 0,
+      "source": "image"
+    },
+    "page": 0,
+    "position": "unknown"
+  },
+  {
+    "id": "image_7f154673-b6f9-4f57-9290-73af5eb1df2d",
+    "caption": "a black and white image of a handwriting that says anna kirstein",
+    "metadata": {
+      "page": 0,
+      "source": "image"
+    },
+    "page": 0,
+    "position": "unknown"
+  }
+]
+
+2025-01-03 00:14:18 | INFO     | app.database.chroma_client:add_documents:88 - Added 2 documents to images collection
+2025-01-03 00:14:18 | INFO     | app.database.chroma_client:add_documents:88 - Added 4 documents to tables collection
+2025-01-03 00:14:18 | INFO     | __main__:process_pdf:78 - PDF processing completed successfully
+2025-01-03 00:14:48 | INFO     | app.agents.pdf_agent:document_search:219 - Found 5 results in text
+2025-01-03 00:14:48 | INFO     | app.agents.pdf_agent:document_search:219 - Found 4 results in tables
+2025-01-03 00:14:48 | INFO     | app.agents.pdf_agent:document_search:219 - Found 2 results in images
+2025-01-03 00:14:48 | INFO     | app.agents.pdf_agent:answer_query:138 - Found 11 relevant documents

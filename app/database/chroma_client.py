@@ -4,6 +4,7 @@ from chromadb.config import Settings
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 from loguru import logger
 import base64
+import json
 
 class ChromaDBClient:
     def __init__(self, persist_directory: str = "./chroma_db"):
@@ -48,6 +49,17 @@ class ChromaDBClient:
                 by_type[doc_type].append(doc)
 
             for doc_type, docs in by_type.items():
+                if doc_type == "images":
+                    logger.info(f"""
+Processing {len(docs)} image documents:
+{json.dumps([{
+    'id': doc['id'],
+    'caption': doc.get('content', ''),
+    'metadata': doc.get('metadata', {}),
+    'page': doc.get('metadata', {}).get('page', 'unknown'),
+    'position': doc.get('metadata', {}).get('position', 'unknown')
+} for doc in docs], indent=2)}
+""")
                 if doc_type in self.collections:
                     collection = self.collections[doc_type]
                     cleaned_metadata = []
