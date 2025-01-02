@@ -6,6 +6,15 @@ import fitz
 from dataclasses import dataclass
 import pandas as pd
 from loguru import logger 
+import torch
+from transformers import TableTransformerForObjectDetection
+from PIL import Image
+
+try:
+    from paddleocr import PaddleOCR
+    PADDLE_AVAILABLE = True
+except ImportError:
+    PADDLE_AVAILABLE = False
 
 @dataclass
 class TableBoundary:
@@ -15,16 +24,33 @@ class TableBoundary:
     y1: float
     confidence: float
 
-class TableProcessor:
-    def __init__(self):
-        self.logger = logger  # Initialize logger at class level
+class EnhancedTableProcessor:
+    def __init__(self, min_confidence: float = 0.5):
+        self.logger = logger
+        self.min_confidence = min_confidence
         try:
-            self.min_confidence = 0.5
-            self.line_min_length = 20
-            self.line_max_gap = 3
-            self.logger.info("Table processor initialized successfully")
+            # Initialize Table Transformer model
+            self.table_detector = TableTransformerForObjectDetection.from_pretrained(
+                "microsoft/table-transformer-detection"
+            )
+            # Initialize Table Structure Recognition model
+            self.structure_recognizer = TableTransformerForObjectDetection.from_pretrained(
+                "microsoft/table-transformer-structure-recognition"
+            )
+            self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            self.table_detector.to(self.device)
+            self.structure_recognizer.to(self.device)
+            
+            # Initialize PaddleOCR for text extraction if available
+            if PADDLE_AVAILABLE:
+                self.ocr_engine = PaddleOCR(use_angle_cls=True, lang='en')
+            else:
+                self.logger.warning("PaddleOCR not available. Text extraction will be limited.")
+                self.ocr_engine = None
+            
+            self.logger.info(f"Enhanced table processor initialized successfully with min_confidence={min_confidence}")
         except Exception as e:
-            self.logger.error(f"Error initializing table processor: {str(e)}")
+            self.logger.error(f"Error initializing enhanced table processor: {str(e)}")
             raise
     async def process(self, page: fitz.Page) -> List[Dict[str, Any]]:
         """Process a PDF page to extract tables."""
@@ -106,32 +132,22 @@ class TableProcessor:
         boundaries = []
         for idx, contour in enumerate(contours):
             x, y, w, h = cv2.boundingRect(contour)
-            area = w * h
-            page_area = img.shape[0] * img.shape[1]
+            # Extract region for confidence calculation
+            region = table_mask[y:y+h, x:x+w]
+            h_region = horizontal[y:y+h, x:x+w]
+            v_region = vertical[y:y+h, x:x+w]
             
-            self.logger.debug(
-                f"Analyzing contour {idx + 1}/{len(contours)}: "
-                f"Area ratio: {(area/page_area):.3f}"
-            )
+            confidence = self._calculate_confidence(region, h_region, v_region)
             
-            # Filter out too small or too large areas
-            if 0.01 * page_area < area < 0.9 * page_area:
-                confidence = self._calculate_confidence(
-                    binary[y:y+h, x:x+w],
-                    horizontal[y:y+h, x:x+w],
-                    vertical[y:y+h, x:x+w]
-                )
-                
-                self.logger.debug(f"Contour {idx} confidence: {confidence:.2f}")
-                
-                if confidence > self.min_confidence:
-                    boundaries.append(TableBoundary(
-                        x0=float(x),
-                        y0=float(y),
-                        x1=float(x + w),
-                        y1=float(y + h),
-                        confidence=confidence
-                    ))
+            # Only include tables above minimum confidence threshold
+            if confidence >= self.min_confidence:
+                boundaries.append(TableBoundary(
+                    x0=float(x),
+                    y0=float(y),
+                    x1=float(x + w),
+                    y1=float(y + h),
+                    confidence=confidence
+                ))
         
         return boundaries
 
@@ -264,4 +280,103 @@ class TableProcessor:
             return False
         except:
             return len(set(row)) == len(row)
+
+    async def detect_and_analyze_tables(self, image: Image.Image) -> List[Dict[str, Any]]:
+        """Detect tables and analyze their structure using Table Transformer."""
+        # Prepare image for the model
+        image_tensor = self.transform_image(image).unsqueeze(0).to(self.device)
+        
+        # Detect tables
+        with torch.no_grad():
+            table_outputs = self.table_detector(image_tensor)
+            structure_outputs = self.structure_recognizer(image_tensor)
+        
+        # Process detections
+        tables = []
+        for table_box, structure in zip(
+            table_outputs['pred_boxes'], 
+            structure_outputs['pred_structures']
+        ):
+            table_info = {
+                "bbox": table_box.tolist(),
+                "cells": self._analyze_table_structure(structure),
+                "confidence": float(table_outputs['pred_scores'].max())
+            }
+            tables.append(table_info)
+            
+        return tables
+
+    def _extract_cell_contents(self, image: Image.Image, cells: List[Dict]) -> pd.DataFrame:
+        """Extract text from cells using PaddleOCR and structure into DataFrame."""
+        cell_contents = []
+        
+        for cell in cells:
+            # Crop cell region
+            cell_image = image.crop((
+                cell['bbox'][0], cell['bbox'][1],
+                cell['bbox'][2], cell['bbox'][3]
+            ))
+            
+            # Extract text using PaddleOCR
+            ocr_result = self.ocr_engine.ocr(
+                np.array(cell_image), 
+                cls=True
+            )
+            
+            cell_text = ' '.join([line[1][0] for line in ocr_result])
+            cell_contents.append({
+                'row': cell['row_index'],
+                'col': cell['col_index'],
+                'text': cell_text,
+                'confidence': float(np.mean([line[1][1] for line in ocr_result]))
+            })
+        
+        # Convert to DataFrame
+        df = pd.DataFrame(cell_contents)
+        pivot_df = df.pivot(index='row', columns='col', values='text')
+        return pivot_df.reset_index(drop=True)
+
+    def _analyze_table_structure(self, structure_output: Dict) -> List[Dict]:
+        """Analyze table structure from model output."""
+        cells = []
+        rows = structure_output['rows']
+        cols = structure_output['columns']
+        
+        # Create cell grid
+        for i, row in enumerate(rows[:-1]):
+            for j, col in enumerate(cols[:-1]):
+                cell = {
+                    'row_index': i,
+                    'col_index': j,
+                    'bbox': [
+                        cols[j],
+                        rows[i],
+                        cols[j+1],
+                        rows[i+1]
+                    ],
+                    'is_header': i == 0,  # Assume first row is header
+                    'spanning': self._detect_cell_spanning(
+                        [cols[j], rows[i], cols[j+1], rows[i+1]],
+                        structure_output['spans']
+                    )
+                }
+                cells.append(cell)
+        
+        return cells
+
+    def _post_process_table(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Apply post-processing to improve table quality."""
+        # Remove empty rows and columns
+        df = df.dropna(how='all').dropna(axis=1, how='all')
+        
+        # Merge similar headers
+        df.columns = self._merge_similar_headers(df.columns)
+        
+        # Fix data types
+        df = self._infer_and_convert_dtypes(df)
+        
+        # Handle merged cells
+        df = self._handle_merged_cells(df)
+        
+        return df
 

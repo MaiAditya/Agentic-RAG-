@@ -4,7 +4,7 @@ import os
 import asyncio
 from loguru import logger
 from .text_processor import TextProcessor
-from .table_processor import TableProcessor
+from .table_processor import EnhancedTableProcessor
 from .image_processor import ImageProcessor
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import multiprocessing
@@ -15,7 +15,7 @@ class PDFProcessor:
     def __init__(self):
         # Initialize specialized processors
         self.text_processor = TextProcessor()
-        self.table_processor = TableProcessor()
+        self.table_processor = EnhancedTableProcessor()
         self.image_processor = ImageProcessor()
         # Use CPU count for optimal parallelization
         self.max_workers = max(multiprocessing.cpu_count() - 1, 2)
@@ -138,7 +138,10 @@ class PDFProcessor:
                 # Extract tables if present
                 tables = await self.table_processor.process(page)
                 if tables:
-                    logger.info(f"Found {len(tables)} tables on page {page_num + 1}")
+                    logger.info(
+                        f"Found {len(tables)} tables on page {page_num + 1} "
+                        f"(Total cells: {sum(t['content'].get('num_rows', 0) * t['content'].get('num_cols', 0) for t in tables)})"
+                    )
                     page_content["tables"] = tables
                 
                 result["pages"].append(page_content)
@@ -250,21 +253,32 @@ class PDFProcessor:
             if "tables" in content and isinstance(content["tables"], list):
                 logger.info(f"Processing {len(content['tables'])} tables")
                 for idx, table in enumerate(content["tables"]):
-                    table_content = str(table.get("content", "")) if table.get("content") else ""
-                    if table_content.strip():  # Only add if there's content
-                        table_doc = {
-                            "id": f"table_{uuid.uuid4()}",
-                            "type": "tables",
-                            "content": table_content,
-                            "metadata": {
-                                "source": "table",
-                                "page": content.get("page", 0),
-                                "position": table.get("position"),
-                                "index": idx
+                    if table.get("content"):
+                        # Handle both string and structured content formats
+                        if isinstance(table["content"], str):
+                            table_content = table["content"]
+                        else:
+                            # Convert structured content to string for vector storage
+                            structured_content = table["content"].get("structured_content", [])
+                            raw_text = table["content"].get("raw_text", "")
+                            table_content = f"{raw_text}\n\nStructured Content:\n{json.dumps(structured_content, indent=2)}"
+
+                        if table_content.strip():  # Only add if there's content
+                            table_doc = {
+                                "id": f"table_{uuid.uuid4()}",
+                                "type": "tables",
+                                "content": table_content,
+                                "metadata": {
+                                    "source": "table",
+                                    "page": content.get("page", 0),
+                                    "position": table.get("position"),
+                                    "dimensions": table["content"].get("dimensions", {}),
+                                    "confidence": table.get("confidence", 0.0),
+                                    "index": idx
+                                }
                             }
-                        }
-                        documents.append(table_doc)
-                        logger.info(f"Added table document with ID: {table_doc['id']}, content length: {len(table_content)}")
+                            documents.append(table_doc)
+                            logger.info(f"Added table document with ID: {table_doc['id']}, content length: {len(table_content)}")
 
         except Exception as e:
             logger.error(f"Error processing content: {str(e)}")

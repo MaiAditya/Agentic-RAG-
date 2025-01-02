@@ -40,9 +40,26 @@ class TableSearchTool(PDFTool):
         
     async def _arun(self, query: str) -> Dict[str, Any]:
         results = await self.chroma_client.query_collection("tables", query, limit=2)
+        
+        # Process the structured table content
+        processed_results = []
+        for result in results.get("documents", []):
+            if isinstance(result, dict):
+                structured_content = result.get("structured_content", [])
+                processed_results.append({
+                    "type": "table",
+                    "content": {
+                        "structured": structured_content,
+                        "raw_text": result.get("raw_text", ""),
+                        "dimensions": result.get("dimensions", {})
+                    },
+                    "metadata": result.get("metadata", {}),
+                    "source": "table_search"
+                })
+        
         return {
             "type": "table",
-            "content": results,
+            "content": processed_results,
             "source": "table_search"
         } 
 

@@ -79,13 +79,25 @@ class PDFAgent:
                 # Process tables
                 for table in page.get("tables", []):
                     if table.get("content"):
+                        # Extract structured content and metadata
+                        table_content = {
+                            "structured_content": table["content"].get("structured_content", []),
+                            "raw_text": table["content"].get("raw_text", ""),
+                            "dimensions": {
+                                "rows": table["content"].get("num_rows", 0),
+                                "columns": table["content"].get("num_cols", 0)
+                            }
+                        }
+                        
                         table_doc = {
                             "id": f"table_{uuid.uuid4()}",
                             "type": "tables",
-                            "content": table["content"],
+                            "content": table_content,
                             "metadata": {
                                 "page": page_num,
                                 "source": "table",
+                                "position": table.get("position"),
+                                "confidence": table.get("confidence", 0.0),
                                 **table.get("metadata", {})
                             }
                         }
