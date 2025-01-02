@@ -1,0 +1,22 @@
+{
+  "caption": "a black and white image of a handwriting that says anna kirstein",
+  "regions": [],
+  "quality_metrics": {
+    "brightness": 232.70165359444474,
+    "contrast": 64.75610393661081,
+    "sharpness": 0.0,
+    "aspect_ratio": 4.873873873873874,
+    "resolution": 60051
+  },
+  "size": [
+    541,
+    111
+  ],
+  "format": "PNG",
+  "mode": "RGB",
+  "logs": {
+    "original_image": "logs/image_processing/originals/original_20250103_013227.png",
+    "caption_file": "logs/image_processing/captions/caption_20250103_013227.txt",
+    "detection_visualization": "logs/image_processing/objects/detected_20250103_013227.png"
+  }
+}

@@ -208,67 +208,61 @@ class PDFProcessor:
         documents = []
         
         try:
-            # Process text content
-            if "text" in content:
-                logger.info("Processing text content")
-                # Ensure text content is a string
-                text_content = str(content["text"]) if content["text"] else ""
-                if text_content.strip():  # Only add if there's actual content
+            # Process each page's content
+            for page in content.get("pages", []):
+                page_num = page.get("page", 0)
+                
+                # Process text content
+                if page.get("text"):
                     text_doc = {
                         "id": f"text_{uuid.uuid4()}",
                         "type": "text",
-                        "content": text_content,
+                        "content": page["text"],
                         "metadata": {
                             "source": "text",
-                            "page": content.get("page", 0)
+                            "page": page_num
                         }
                     }
                     documents.append(text_doc)
-                    logger.info(f"Added text document with ID: {text_doc['id']}, content length: {len(text_content)}")
-
-            # Process images
-            if "images" in content and isinstance(content["images"], list):
-                logger.info(f"Processing {len(content['images'])} images")
-                for idx, img in enumerate(content["images"]):
-                    caption = str(img.get("caption", "")) if img.get("caption") else ""
-                    if caption.strip():  # Only add if there's a caption
+                    logger.info(f"Created text document for page {page_num}")
+                
+                # Process images
+                for idx, img in enumerate(page.get("images", [])):
+                    if img.get("caption"):
                         image_doc = {
                             "id": f"image_{uuid.uuid4()}",
                             "type": "images",
-                            "content": caption,
+                            "content": img["caption"],
                             "metadata": {
                                 "source": "image",
-                                "page": content.get("page", 0),
-                                "position": img.get("position"),
-                                "index": idx
+                                "page": page_num,
+                                "index": idx,
+                                "position": img.get("position", {})
                             }
                         }
                         documents.append(image_doc)
-                        logger.info(f"Added image document with ID: {image_doc['id']}, caption length: {len(caption)}")
-
-            # Process tables
-            if "tables" in content and isinstance(content["tables"], list):
-                logger.info(f"Processing {len(content['tables'])} tables")
-                for idx, table in enumerate(content["tables"]):
-                    table_content = str(table.get("content", "")) if table.get("content") else ""
-                    if table_content.strip():  # Only add if there's content
+                        logger.info(f"Created image document for page {page_num}, image {idx}")
+                
+                # Process tables
+                for idx, table in enumerate(page.get("tables", [])):
+                    if table.get("content"):
                         table_doc = {
                             "id": f"table_{uuid.uuid4()}",
                             "type": "tables",
-                            "content": table_content,
+                            "content": table["content"],
                             "metadata": {
                                 "source": "table",
-                                "page": content.get("page", 0),
-                                "position": table.get("position"),
-                                "index": idx
+                                "page": page_num,
+                                "index": idx,
+                                "position": table.get("position", {})
                             }
                         }
                         documents.append(table_doc)
-                        logger.info(f"Added table document with ID: {table_doc['id']}, content length: {len(table_content)}")
+                        logger.info(f"Created table document for page {page_num}, table {idx}")
+
+            logger.info(f"Processed {len(documents)} total documents")
+            return documents
 
         except Exception as e:
-            logger.error(f"Error processing content: {str(e)}")
+            logger.error(f"Error processing content into documents: {str(e)}")
             raise
-
-        logger.info(f"Processed {len(documents)} total documents")
-        return documents

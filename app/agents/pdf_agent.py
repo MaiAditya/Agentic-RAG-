@@ -1,4 +1,4 @@
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 import logging
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
@@ -8,7 +8,6 @@ from ..retrieval.reranker import Reranker
 from .prompts import REACT_AGENT_PROMPT
 from loguru import logger
 import uuid
-from app.agents.tools.image_tools import ImageAnalysisTool
 
 class PDFAgent:
     def __init__(self, pdf_processor, chroma_client):
@@ -30,8 +29,7 @@ class PDFAgent:
         self.tools = [
             DocumentSearchTool(chroma_client),
             TableSearchTool(chroma_client),
-            ImageSearchTool(chroma_client),
-            ImageAnalysisTool()
+            ImageSearchTool(chroma_client)
         ]
         
         # Initialize prompts
@@ -108,34 +106,52 @@ class PDFAgent:
             logger.error(f"Error in process_pdf: {e}")
             raise ValueError(f"Failed to process PDF: {str(e)}")
 
-    async def answer_query(self, query: str) -> str:
-        """Answer a query about the processed PDF content.
-        
-        Args:
-            query: The question to answer
-            
-        Returns:
-            str: The generated answer
-        """
+    async def answer_query(
+        self,
+        query: str,
+        min_similarity: float = 0.3,
+        content_types: List[str] = None,
+        page: Optional[int] = None
+    ) -> str:
+        """Answer a query about the processed PDF content."""
         try:
+            if content_types is None:
+                content_types = ["text", "tables", "images"]
+            
             # Search for relevant documents
-            search_results = await self.document_search(query)
+            search_results = await self.document_search(
+                query=query,
+                top_k=5,
+                min_similarity=min_similarity,
+                content_types=content_types,
+                page=page
+            )
             
             # Extract relevant documents
             relevant_docs = []
             for collection_results in search_results.values():
+                if not collection_results:
+                    continue
+                    
+                # Handle nested lists in the results
+                documents = collection_results["documents"][0]  # Get first list
+                metadatas = collection_results["metadatas"][0]  # Get first list
+                distances = collection_results["distances"][0]  # Get first list
+                
                 for i, (doc, metadata, distance) in enumerate(zip(
-                    collection_results["documents"],
-                    collection_results["metadatas"],
-                    collection_results["distances"]
+                    documents, metadatas, distances
                 )):
-                    relevant_docs.append({
-                        "content": doc,
-                        "metadata": metadata,
-                        "distance": distance
-                    })
+                    if isinstance(distance, (int, float)) and distance >= min_similarity:
+                        relevant_docs.append({
+                            "content": doc,
+                            "metadata": metadata,
+                            "distance": distance
+                        })
             
             logger.info(f"Found {len(relevant_docs)} relevant documents")
+            
+            if not relevant_docs:
+                return "I couldn't find any relevant information in the document to answer your question."
             
             # Generate answer using the relevant documents
             answer = await self._generate_answer(query, relevant_docs)
@@ -166,10 +182,17 @@ class PDFAgent:
     async def _generate_answer(self, query: str, relevant_docs: List[Dict[str, Any]]) -> str:
         """Generate an answer based on the query and relevant documents."""
         try:
+            # Sort documents by relevance (distance)
+            sorted_docs = sorted(relevant_docs, key=lambda x: x.get('distance', 1.0))
+            
+            # Take only the top most relevant documents to stay within token limits
+            # Adjust this number based on your needs
+            top_docs = sorted_docs[:5]  # Start with top 5 documents
+            
             # Prepare context from relevant documents
             context = "\n\n".join([
                 f"Document {i+1}:\n{doc.get('content', '')}" 
-                for i, doc in enumerate(relevant_docs)
+                for i, doc in enumerate(top_docs)
             ])
             
             # Create messages in the correct format for ChatOpenAI
@@ -190,7 +213,7 @@ If the information is not available in the documents, please say so.""",
                 }
             ]
 
-            # Get response from LLM using the correct format
+            # Get response from LLM
             response = await self.llm.ainvoke(
                 input=messages
             )
@@ -201,25 +224,45 @@ If the information is not available in the documents, please say so.""",
             logger.error(f"Error generating answer: {str(e)}")
             raise ValueError(f"Failed to generate answer: {str(e)}")
 
-    async def document_search(self, query: str, top_k: int = 5) -> Dict[str, Any]:
-        """Search for relevant documents across all collections."""
+    async def document_search(
+        self, 
+        query: str, 
+        top_k: int = 5,
+        min_similarity: float = 0.3,
+        content_types: List[str] = None,
+        page: Optional[int] = None
+    ) -> Dict[str, Any]:
+        """Search for relevant documents across collections.
+        
+        Args:
+            query: The search query
+            top_k: Number of results to return per collection
+            min_similarity: Minimum similarity threshold
+            content_types: List of content types to search
+            page: Optional page number to restrict search
+            
+        Returns:
+            Dict containing search results for each collection
+        """
         try:
             results = {}
             
-            # Search each collection
-            for collection_name in ["text", "tables", "images"]:
+            # Search specified collections
+            for collection_name in content_types:
+                if collection_name not in ["text", "tables", "images"]:
+                    continue
+                    
                 try:
                     collection_results = await self.chroma_client.query_collection(
                         collection_name=collection_name,
                         query_text=query,
-                        n_results=top_k
+                        n_results=top_k,
+                        where={"page": page} if page is not None else None
                     )
                     if collection_results:
                         results[collection_name] = collection_results
                         logger.info(f"Found {len(collection_results.get('documents', []))} results in {collection_name}")
-                    else:
-                        logger.debug(f"No results found in {collection_name} collection")
-                        
+                    
                 except Exception as e:
                     logger.warning(f"Error searching {collection_name} collection: {str(e)}")
                     continue

@@ -14,6 +14,8 @@ from concurrent.futures import ThreadPoolExecutor
 from functools import partial
 from transformers import DetrImageProcessor, DetrForObjectDetection
 import json
+import datetime
+import os
 
 @dataclass
 class ImageMetadata:
@@ -60,12 +62,24 @@ class ImageProcessor:
     async def process_image(self, image: Image.Image) -> Dict[str, Any]:
         """Process a single image with enhanced capabilities"""
         try:
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            # Create logging directories
+            os.makedirs("logs/image_processing/originals", exist_ok=True)
+            os.makedirs("logs/image_processing/captions", exist_ok=True)
+            os.makedirs("logs/image_processing/objects", exist_ok=True)
+            
+            # Save original image
+            original_path = f"logs/image_processing/originals/original_{timestamp}.png"
+            image.save(original_path)
+            self.logger.info(f"Saved original image to {original_path}")
+            
             # Log initial image properties
             self.logger.info(f"""
 Processing image with properties:
 - Size: {image.size}
 - Format: {image.format}
 - Mode: {image.mode}
+- Path: {original_path}
 """)
             
             # Validate and preprocess image
@@ -75,42 +89,70 @@ Processing image with properties:
 
             # Generate detailed caption
             caption = await self._generate_caption(image)
-            self.logger.info(f"Generated caption: {caption}")
+            
+            # Save caption to file
+            caption_path = f"logs/image_processing/captions/caption_{timestamp}.txt"
+            with open(caption_path, 'w') as f:
+                f.write(f"Original Image: {original_path}\n")
+                f.write(f"Caption: {caption}\n")
+            self.logger.info(f"Generated caption saved to {caption_path}")
             
             # Detect objects and regions of interest
             regions = await self._detect_objects(image)
-            self.logger.info(f"""
-Detected {len(regions)} objects/regions:
-{[f'- {r.label} (confidence: {r.score:.2f})' for r in regions]}
-""")
             
-            # Analyze image quality and characteristics
-            quality_metrics = self._analyze_quality(image)
-            self.logger.info(f"""
-Image quality metrics:
-- Brightness: {quality_metrics.get('brightness', 'N/A')}
-- Contrast: {quality_metrics.get('contrast', 'N/A')}
-- Sharpness: {quality_metrics.get('sharpness', 'N/A')}
-- Aspect Ratio: {quality_metrics.get('aspect_ratio', 'N/A')}
-- Resolution: {quality_metrics.get('resolution', 'N/A')}
-""")
+            # Create visualization of detected objects
+            vis_image = image.copy()
+            vis_array = np.array(vis_image)
             
+            for region in regions:
+                x1, y1, x2, y2 = [int(coord) for coord in region.bbox]
+                cv2.rectangle(
+                    vis_array,
+                    (x1, y1),
+                    (x2, y2),
+                    (0, 255, 0),
+                    2
+                )
+                cv2.putText(
+                    vis_array,
+                    f"{region.label}: {region.score:.2f}",
+                    (x1, y1 - 10),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.5,
+                    (0, 255, 0),
+                    2
+                )
+            
+            # Save visualization
+            vis_path = f"logs/image_processing/objects/detected_{timestamp}.png"
+            cv2.imwrite(vis_path, cv2.cvtColor(vis_array, cv2.COLOR_RGB2BGR))
+            self.logger.info(f"Saved object detection visualization to {vis_path}")
+            
+            # Rest of the processing...
             result = {
                 "caption": caption,
                 "regions": [r.__dict__ for r in regions],
-                "quality_metrics": quality_metrics,
+                "quality_metrics": self._analyze_quality(image),
                 "size": image.size,
                 "format": image.format,
-                "mode": image.mode
+                "mode": image.mode,
+                "logs": {
+                    "original_image": original_path,
+                    "caption_file": caption_path,
+                    "detection_visualization": vis_path
+                }
             }
             
-            # Log final structured output
-            self.logger.info(f"Final processed image data:\n{json.dumps(result, indent=2)}")
+            # Save complete analysis results
+            analysis_path = f"logs/image_processing/captions/analysis_{timestamp}.json"
+            with open(analysis_path, 'w') as f:
+                json.dump(result, f, indent=2)
             
+            self.logger.info(f"Complete analysis saved to {analysis_path}")
             return result
 
         except Exception as e:
-            self.logger.error(f"Error processing image: {e}")
+            self.logger.error(f"Error processing image: {e}", exc_info=True)
             return {"error": str(e)}
 
     def _validate_image(self, image: Image.Image) -> bool:

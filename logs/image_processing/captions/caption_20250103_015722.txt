@@ -1,0 +1,2 @@
+Original Image: logs/image_processing/originals/original_20250103_015722.png
+Caption: a black and white image of a handwriting that says anna kirstein

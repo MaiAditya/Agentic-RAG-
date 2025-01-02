@@ -49,6 +49,9 @@ class ChromaDBClient:
                 by_type[doc_type].append(doc)
 
             for doc_type, docs in by_type.items():
+                if not docs:  # Skip if no documents for this type
+                    continue
+                    
                 if doc_type == "images":
                     logger.info(f"""
 Processing {len(docs)} image documents:
@@ -60,72 +63,122 @@ Processing {len(docs)} image documents:
     'position': doc.get('metadata', {}).get('position', 'unknown')
 } for doc in docs], indent=2)}
 """)
+
                 if doc_type in self.collections:
                     collection = self.collections[doc_type]
                     cleaned_metadata = []
                     cleaned_contents = []
+                    cleaned_ids = []
                     
                     for doc in docs:
+                        # Skip documents without required fields
+                        if not all(key in doc for key in ["id", "content", "metadata"]):
+                            logger.warning(f"Skipping document missing required fields: {doc}")
+                            continue
+                            
                         metadata = doc.get("metadata", {})
+                        # Ensure all metadata values are strings
                         cleaned_metadata.append({
                             k: str(v) if v is not None else ""
                             for k, v in metadata.items()
                         })
                         
-                        # Handle image content differently
+                        # Handle different content types
                         if doc_type == "images" and isinstance(doc["content"], bytes):
-                            # Convert bytes to base64 string for storage
                             content = base64.b64encode(doc["content"]).decode('utf-8')
+                        elif isinstance(doc["content"], (dict, list)):
+                            content = json.dumps(doc["content"])
                         else:
-                            content = doc["content"]
+                            content = str(doc["content"])
+                        
                         cleaned_contents.append(content)
+                        cleaned_ids.append(str(doc["id"]))
                     
-                    collection.add(
-                        documents=cleaned_contents,
-                        ids=[str(doc["id"]) for doc in docs],
-                        metadatas=cleaned_metadata
-                    )
-                    logger.info(f"Added {len(docs)} documents to {doc_type} collection")
+                    if cleaned_contents:  # Only add if we have valid documents
+                        collection.add(
+                            documents=cleaned_contents,
+                            ids=cleaned_ids,
+                            metadatas=cleaned_metadata
+                        )
+                        logger.info(f"Added {len(cleaned_contents)} documents to {doc_type} collection")
 
         except Exception as e:
             logger.error(f"Error adding documents: {str(e)}")
             raise
 
-    async def query_collection(self, collection_name: str, query_text: str, n_results: int = 5) -> Dict[str, Any]:
-        """Query a specific collection.
+    async def query_collection(self, collection_name: str, query_text: str, 
+                             min_similarity: float = 0.3, **kwargs):
+        logger.info(f"""
+        Querying ChromaDB collection:
+        - Collection: {collection_name}
+        - Query: {query_text}
+        - Min similarity: {min_similarity}
+        - Additional params: {kwargs}
+        """)
         
-        Args:
-            collection_name: Name of the collection to query
-            query_text: Query text
-            n_results: Number of results to return
-            
-        Returns:
-            Dict containing query results
-        """
         try:
-            if collection_name not in self.collections:
+            collection = self.collections.get(collection_name)
+            if not collection:
                 logger.warning(f"Collection {collection_name} not found")
                 return None
             
-            collection = self.collections[collection_name]
+            # Check if collection is empty
+            if collection.count() == 0:
+                logger.warning(f"Collection {collection_name} is empty")
+                return None
             
-            # Perform the query
-            results = collection.query(
-                query_texts=[query_text],
-                n_results=n_results
-            )
+            # Extract n_results from kwargs if present, otherwise use default
+            n_results = kwargs.pop('n_results', 10)
             
-            if results and len(results['documents']) > 0:
-                return {
-                    "documents": results['documents'][0],  # First query's results
-                    "metadatas": results['metadatas'][0],
-                    "distances": results['distances'][0],
-                    "ids": results['ids'][0]
-                }
+            # Extract where clause if present
+            where = kwargs.pop('where', None)
             
-            return None
+            query_params = {
+                "query_texts": [query_text],
+                "n_results": n_results
+            }
+            
+            # Add where clause if present
+            if where:
+                query_params["where"] = where
+            
+            # Add any remaining kwargs
+            query_params.update(kwargs)
+            
+            results = collection.query(**query_params)
+            
+            # Check if results are empty
+            if not results or not any(results["documents"]):
+                logger.info(f"No results found in collection {collection_name}")
+                return None
+            
+            logger.info(f"Query results from {collection_name}: {json.dumps(results, indent=2)}")
+            return results
             
         except Exception as e:
-            logger.error(f"Error querying {collection_name} collection: {str(e)}")
+            logger.error(f"Error querying collection {collection_name}: {str(e)}", exc_info=True)
+            raise
+
+    async def get_collection_stats(self) -> Dict[str, Any]:
+        """Get statistics about all collections."""
+        try:
+            stats = {}
+            for name, collection in self.collections.items():
+                try:
+                    count = collection.count()
+                    stats[name] = {
+                        "count": count,
+                        "exists": True
+                    }
+                except Exception as e:
+                    logger.error(f"Error getting stats for collection {name}: {e}")
+                    stats[name] = {
+                        "count": 0,
+                        "exists": False,
+                        "error": str(e)
+                    }
+            return stats
+        except Exception as e:
+            logger.error(f"Error getting collection stats: {e}")
             raise
 

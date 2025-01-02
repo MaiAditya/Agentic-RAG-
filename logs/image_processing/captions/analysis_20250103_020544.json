@@ -1,0 +1,22 @@
+{
+  "caption": "julia m huggins, president",
+  "regions": [],
+  "quality_metrics": {
+    "brightness": 241.79052970641237,
+    "contrast": 49.061546779584965,
+    "sharpness": 0.0,
+    "aspect_ratio": 2.431654676258993,
+    "resolution": 46982
+  },
+  "size": [
+    338,
+    139
+  ],
+  "format": "PNG",
+  "mode": "RGB",
+  "logs": {
+    "original_image": "logs/image_processing/originals/original_20250103_020544.png",
+    "caption_file": "logs/image_processing/captions/caption_20250103_020544.txt",
+    "detection_visualization": "logs/image_processing/objects/detected_20250103_020544.png"
+  }
+}
