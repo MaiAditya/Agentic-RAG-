@@ -37,7 +37,8 @@ class PDFProcessor:
                     self.executor,
                     self._process_page_sync,
                     doc[page_num],
-                    page_num
+                    page_num,
+                    doc
                 )
                 futures.append(future)
             
@@ -62,7 +63,7 @@ class PDFProcessor:
             if 'doc' in locals():
                 doc.close()
 
-    def _process_page_sync(self, page: fitz.Page, page_num: int) -> Dict[str, Any]:
+    def _process_page_sync(self, page: fitz.Page, page_num: int, doc: fitz.Document) -> Dict[str, Any]:
         """Process a single page synchronously."""
         try:
             # Create a new event loop for this thread
@@ -75,7 +76,7 @@ class PDFProcessor:
                     asyncio.gather(
                         self.text_processor.process(page),
                         self.table_processor.process(page),
-                        self.image_processor.process(page),
+                        self.image_processor.process(page, doc),
                         self._analyze_layout(page)
                     )
                 )
@@ -129,7 +130,7 @@ class PDFProcessor:
                     page_content["text"] = "\n".join([block[4] for block in text_blocks if isinstance(block[4], str)])
                 
                 # Extract images if present
-                images = await self.image_processor.process(page)
+                images = await self.image_processor.process(page, doc)
                 if images:
                     logger.info(f"Found {len(images)} images on page {page_num + 1}")
                     page_content["images"] = images

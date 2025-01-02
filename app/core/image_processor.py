@@ -31,8 +31,9 @@ class ImageRegion:
 
 class ImageProcessor:
     def __init__(self):
-        # Initialize vision models
+        self.logger = logger  # Initialize logger at class level
         try:
+            # Initialize vision models
             # BLIP-2 for image captioning and understanding
             self.caption_processor = AutoProcessor.from_pretrained("Salesforce/blip2-opt-2.7b")
             self.caption_model = AutoModelForVision2Seq.from_pretrained(
@@ -49,10 +50,10 @@ class ImageProcessor:
             self.caption_model.to(self.device)
             self.object_model.to(self.device)
             
-            logger.info(f"Image processing models loaded successfully on {self.device}")
+            self.logger.info(f"Image processing models loaded successfully on {self.device}")
             
         except Exception as e:
-            logger.error(f"Error initializing image processing models: {e}")
+            self.logger.error(f"Error initializing image processing models: {e}")
             raise
 
     async def process_image(self, image: Image.Image) -> Dict[str, Any]:
@@ -201,69 +202,60 @@ class ImageProcessor:
         # Implementation details...
         return np.zeros_like(image)  # Placeholder
 
-    async def process(self, image_data: Union[bytes, 'fitz.Page']) -> Optional[List[Dict[str, Any]]]:
-        """Process images from a PDF page or raw bytes"""
-        try:
-            # Handle PyMuPDF Page object
-            if isinstance(image_data, fitz.Page):
-                # Get list of image blocks from the page
-                image_list = image_data.get_images()
+    async def process(self, page: fitz.Page, doc: fitz.Document) -> List[Dict[str, Any]]:
+        """Process images on a page."""
+        self.logger.info(f"Processing page {page.number} for images")
+        
+        images = []
+        image_list = page.get_images()
+        
+        self.logger.info(f"Found {len(image_list)} raw images on page {page.number}")
+        
+        for img_idx, img_info in enumerate(image_list):
+            try:
+                xref = img_info[0]
+                base_image = doc.extract_image(xref)
                 
-                if not image_list:
-                    logger.info("No images found on page")
-                    return None
+                if base_image:
+                    self.logger.info(
+                        f"Processing image {img_idx + 1}/{len(image_list)} on page {page.number}:\n"
+                        f"Format: {base_image['ext']}\n"
+                        f"Dimensions: {base_image['width']}x{base_image['height']}\n"
+                        f"Color space: {base_image['colorspace']}"
+                    )
                     
-                processed_images = []
-                for img_idx, image_info in enumerate(image_list):
-                    try:
-                        # Get the image data
-                        xref = image_info[0]
-                        base_image = image_data.parent.extract_image(xref)
-                        
-                        if base_image:
-                            image_bytes = base_image["image"]
-                            image = Image.open(io.BytesIO(image_bytes))
-                            
-                            # Process the image using our existing method
-                            results = await self.process_image(image)
-                            
-                            if "error" not in results:
-                                processed_images.append({
-                                    "caption": results["caption"],
-                                    "metadata": {
-                                        "size": results["size"],
-                                        "format": results["format"],
-                                        "mode": results["mode"],
-                                        "quality": results["quality_metrics"],
-                                        "regions": results["regions"]
-                                    }
-                                })
-                                
-                    except Exception as e:
-                        logger.error(f"Error processing image {img_idx} on page: {e}")
-                        continue
-                        
-                return processed_images if processed_images else None
-                
-            else:
-                # Handle direct bytes input
-                image = Image.open(io.BytesIO(image_data))
-                results = await self.process_image(image)
-                
-                if "error" in results:
-                    return None
+                    # Convert image bytes to PIL Image
+                    image_bytes = base_image["image"]
+                    pil_image = Image.open(io.BytesIO(image_bytes))
                     
-                return [{
-                    "caption": results["caption"],
-                    "metadata": {
-                        "size": results["size"],
-                        "format": results["format"],
-                        "mode": results["mode"],
-                        "quality": results["quality_metrics"],
-                        "regions": results["regions"]
-                    }
-                }]
+                    # Process image using existing methods
+                    processed_result = await self.process_image(pil_image)
+                    if processed_result and "error" not in processed_result:
+                        processed_result.update({
+                            "page_number": page.number,
+                            "image_index": img_idx,
+                            "raw_info": {
+                                "format": base_image["ext"],
+                                "width": base_image["width"],
+                                "height": base_image["height"],
+                                "colorspace": base_image["colorspace"]
+                            }
+                        })
+                        images.append(processed_result)
+                        self.logger.info(
+                            f"Successfully processed image {img_idx} on page {page.number}"
+                        )
+                    else:
+                        self.logger.warning(
+                            f"Image {img_idx} on page {page.number} failed processing"
+                        )
                 
-        except Exception as e:
-            logger.error(f"Error in image processing: {e}")
-            return None
+            except Exception as e:
+                self.logger.error(
+                    f"Error processing image {img_idx} on page {page.number}: {str(e)}"
+                )
+        
+        self.logger.info(
+            f"Successfully processed {len(images)}/{len(image_list)} images on page {page.number}"
+        )
+        return images

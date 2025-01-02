@@ -5,6 +5,7 @@ from PIL import Image
 import fitz
 from dataclasses import dataclass
 import pandas as pd
+from loguru import logger 
 
 @dataclass
 class TableBoundary:
@@ -16,12 +17,19 @@ class TableBoundary:
 
 class TableProcessor:
     def __init__(self):
-        self.min_confidence = 0.5
-        self.line_min_length = 20
-        self.line_max_gap = 3
-
+        self.logger = logger  # Initialize logger at class level
+        try:
+            self.min_confidence = 0.5
+            self.line_min_length = 20
+            self.line_max_gap = 3
+            self.logger.info("Table processor initialized successfully")
+        except Exception as e:
+            self.logger.error(f"Error initializing table processor: {str(e)}")
+            raise
     async def process(self, page: fitz.Page) -> List[Dict[str, Any]]:
         """Process a PDF page to extract tables."""
+        self.logger.info(f"Processing page {page.number} for table detection. Page size: {page.rect}")
+        
         # Convert page to image for table detection
         pix = page.get_pixmap()
         img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
@@ -29,14 +37,32 @@ class TableProcessor:
 
         # Detect table boundaries
         table_boundaries = self._detect_tables(img_np)
+        self.logger.info(f"Found {len(table_boundaries)} potential tables on page {page.number}")
         
         # Extract and process each detected table
         tables = []
         for idx, boundary in enumerate(table_boundaries):
+            self.logger.info(
+                f"Processing table {idx + 1}/{len(table_boundaries)} on page {page.number}:\n"
+                f"Position: ({boundary.x0:.1f}, {boundary.y0:.1f}, {boundary.x1:.1f}, {boundary.y1:.1f})\n"
+                f"Confidence: {boundary.confidence:.2f}"
+            )
+            
             table_content = self._extract_table_content(page, boundary)
             if table_content:
+                if "error" in table_content:
+                    self.logger.warning(
+                        f"Table {idx} extraction error on page {page.number}: {table_content['error']}"
+                    )
+                else:
+                    self.logger.info(
+                        f"Successfully extracted table {idx} from page {page.number}:\n"
+                        f"Dimensions: {table_content['num_rows']}x{table_content['num_cols']} cells\n"
+                        f"Content preview: {str(table_content['structured_content'])[:200]}..."
+                    )
                 tables.append({
-                    "id": idx,
+                    "id": f"table_{page.number}_{idx}",
+                    "page": page.number,
                     "position": {
                         "x0": boundary.x0,
                         "y0": boundary.y0,
@@ -47,10 +73,15 @@ class TableProcessor:
                     "confidence": boundary.confidence
                 })
 
+        self.logger.info(
+            f"Successfully processed {len(tables)} tables on page {page.number}"
+        )
         return tables
 
     def _detect_tables(self, img: np.ndarray) -> List[TableBoundary]:
         """Detect table boundaries in the image."""
+        self.logger.debug(f"Detecting tables in image of size {img.shape}")
+        
         # Convert to grayscale
         gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
         
@@ -73,10 +104,15 @@ class TableProcessor:
         
         # Process contours to find table boundaries
         boundaries = []
-        for contour in contours:
+        for idx, contour in enumerate(contours):
             x, y, w, h = cv2.boundingRect(contour)
             area = w * h
             page_area = img.shape[0] * img.shape[1]
+            
+            self.logger.debug(
+                f"Analyzing contour {idx + 1}/{len(contours)}: "
+                f"Area ratio: {(area/page_area):.3f}"
+            )
             
             # Filter out too small or too large areas
             if 0.01 * page_area < area < 0.9 * page_area:
@@ -85,6 +121,8 @@ class TableProcessor:
                     horizontal[y:y+h, x:x+w],
                     vertical[y:y+h, x:x+w]
                 )
+                
+                self.logger.debug(f"Contour {idx} confidence: {confidence:.2f}")
                 
                 if confidence > self.min_confidence:
                     boundaries.append(TableBoundary(
@@ -226,3 +264,4 @@ class TableProcessor:
             return False
         except:
             return len(set(row)) == len(row)
+

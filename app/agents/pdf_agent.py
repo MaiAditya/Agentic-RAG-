@@ -8,6 +8,7 @@ from ..retrieval.reranker import Reranker
 from .prompts import REACT_AGENT_PROMPT
 from loguru import logger
 import uuid
+from app.agents.tools.image_tools import ImageAnalysisTool
 
 class PDFAgent:
     def __init__(self, pdf_processor, chroma_client):
@@ -29,7 +30,8 @@ class PDFAgent:
         self.tools = [
             DocumentSearchTool(chroma_client),
             TableSearchTool(chroma_client),
-            ImageSearchTool(chroma_client)
+            ImageSearchTool(chroma_client),
+            ImageAnalysisTool()
         ]
         
         # Initialize prompts
@@ -200,15 +202,7 @@ If the information is not available in the documents, please say so.""",
             raise ValueError(f"Failed to generate answer: {str(e)}")
 
     async def document_search(self, query: str, top_k: int = 5) -> Dict[str, Any]:
-        """Search for relevant documents across all collections.
-        
-        Args:
-            query: The search query
-            top_k: Number of results to return per collection
-            
-        Returns:
-            Dict containing search results for each collection
-        """
+        """Search for relevant documents across all collections."""
         try:
             results = {}
             
@@ -223,7 +217,9 @@ If the information is not available in the documents, please say so.""",
                     if collection_results:
                         results[collection_name] = collection_results
                         logger.info(f"Found {len(collection_results.get('documents', []))} results in {collection_name}")
-                    
+                    else:
+                        logger.debug(f"No results found in {collection_name} collection")
+                        
                 except Exception as e:
                     logger.warning(f"Error searching {collection_name} collection: {str(e)}")
                     continue
