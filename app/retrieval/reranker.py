@@ -2,6 +2,7 @@ from typing import List, Dict, Any
 from sentence_transformers import CrossEncoder
 import torch
 from loguru import logger
+import json
 
 class Reranker:
     def __init__(self, model_name: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"):
@@ -12,14 +13,28 @@ class Reranker:
             logger.error(f"Error initializing reranker model: {e}")
             self.model = None
 
+    def _prepare_content(self, content: Any) -> str:
+        """Convert content to string format suitable for reranking."""
+        if isinstance(content, dict):
+            return json.dumps(content, ensure_ascii=False)
+        elif isinstance(content, str):
+            try:
+                # Try to parse JSON string
+                parsed = json.loads(content)
+                return json.dumps(parsed, ensure_ascii=False)
+            except json.JSONDecodeError:
+                return content
+        return str(content)
+
     def rerank(self, results: List[Dict[str, Any]], query: str) -> List[Dict[str, Any]]:
         """Rerank the retrieved results using cross-encoder."""
         if not self.model or not results:
             return results
 
         try:
-            # Prepare pairs for cross-encoder
-            pairs = [(query, result.get("content", "")) for result in results]
+            # Prepare pairs for cross-encoder with content conversion
+            pairs = [(query, self._prepare_content(result.get("content", ""))) 
+                    for result in results]
             
             # Get cross-encoder scores
             scores = self.model.predict(pairs)
@@ -45,7 +60,9 @@ class Reranker:
             return results
 
         try:
-            all_pairs = [(query, result.get("content", "")) for result in results]
+            # Prepare pairs with content conversion
+            all_pairs = [(query, self._prepare_content(result.get("content", ""))) 
+                        for result in results]
             all_scores = []
 
             # Process in batches

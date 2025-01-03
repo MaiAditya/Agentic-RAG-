@@ -118,43 +118,23 @@ class PDFAgent:
             if content_types is None:
                 content_types = ["text", "tables", "images"]
             
-            # Search for relevant documents
-            search_results = await self.document_search(
+            # Use hybrid retriever instead of direct document search
+            relevant_docs = await self.retriever.get_relevant_documents(
                 query=query,
-                top_k=5,
-                min_similarity=min_similarity,
-                content_types=content_types,
-                page=page
+                limit=10  # Get more docs initially for reranking
             )
-            
-            # Extract relevant documents
-            relevant_docs = []
-            for collection_results in search_results.values():
-                if not collection_results:
-                    continue
-                    
-                # Handle nested lists in the results
-                documents = collection_results["documents"][0]  # Get first list
-                metadatas = collection_results["metadatas"][0]  # Get first list
-                distances = collection_results["distances"][0]  # Get first list
-                
-                for i, (doc, metadata, distance) in enumerate(zip(
-                    documents, metadatas, distances
-                )):
-                    if isinstance(distance, (int, float)) and distance >= min_similarity:
-                        relevant_docs.append({
-                            "content": doc,
-                            "metadata": metadata,
-                            "distance": distance
-                        })
-            
-            logger.info(f"Found {len(relevant_docs)} relevant documents")
             
             if not relevant_docs:
                 return "I couldn't find any relevant information in the document to answer your question."
             
-            # Generate answer using the relevant documents
-            answer = await self._generate_answer(query, relevant_docs)
+            # Apply reranking to improve result ordering
+            reranked_docs = self.reranker.rerank(relevant_docs, query)
+            
+            # Take top results after reranking
+            top_docs = reranked_docs[:5]
+            
+            # Generate answer using reranked documents
+            answer = await self._generate_answer(query, top_docs)
             
             return answer
             
@@ -197,20 +177,20 @@ class PDFAgent:
             
             # Create messages in the correct format for ChatOpenAI
             messages = [
-                {
-                    "content": "You are a helpful assistant that answers questions based on the provided documents.",
-                    "role": "system"
-                },
-                {
-                    "content": f"""Based on the following documents, please answer this question: {query}
+                            {
+                                "content": "You are a helpful assistant that answers questions based on the provided documents.",
+                                "role": "system"
+                            },
+                            {
+                                "content": f"""Based on the following documents, please answer this question: {query}
 
-Context from documents:
-{context}
+            Context from documents:
+            {context}
 
-Please provide a clear and concise answer based only on the information provided in the documents above.
-If the information is not available in the documents, please say so.""",
-                    "role": "user"
-                }
+            Please provide a clear and concise answer based only on the information provided in the documents above.
+            If the information is not available in the documents, please say so.""",
+                                "role": "user"
+                            }
             ]
 
             # Get response from LLM

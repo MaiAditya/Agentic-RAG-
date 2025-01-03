@@ -54,15 +54,15 @@ class ChromaDBClient:
                     
                 if doc_type == "images":
                     logger.info(f"""
-Processing {len(docs)} image documents:
-{json.dumps([{
-    'id': doc['id'],
-    'caption': doc.get('content', ''),
-    'metadata': doc.get('metadata', {}),
-    'page': doc.get('metadata', {}).get('page', 'unknown'),
-    'position': doc.get('metadata', {}).get('position', 'unknown')
-} for doc in docs], indent=2)}
-""")
+                        Processing {len(docs)} image documents:
+                        {json.dumps([{
+                            'id': doc['id'],
+                            'caption': doc.get('content', ''),
+                            'metadata': doc.get('metadata', {}),
+                            'page': doc.get('metadata', {}).get('page', 'unknown'),
+                            'position': doc.get('metadata', {}).get('position', 'unknown')
+                        } for doc in docs], indent=2)}
+                        """)
 
                 if doc_type in self.collections:
                     collection = self.collections[doc_type]

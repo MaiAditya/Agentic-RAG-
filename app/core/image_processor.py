@@ -75,12 +75,12 @@ class ImageProcessor:
             
             # Log initial image properties
             self.logger.info(f"""
-Processing image with properties:
-- Size: {image.size}
-- Format: {image.format}
-- Mode: {image.mode}
-- Path: {original_path}
-""")
+            Processing image with properties:
+            - Size: {image.size}
+            - Format: {image.format}
+            - Mode: {image.mode}
+            - Path: {original_path}
+            """)
             
             # Validate and preprocess image
             if not self._validate_image(image):
@@ -333,23 +333,23 @@ Processing image with properties:
     def _format_metadata_for_logging(self, image_data: Dict[str, Any]) -> str:
         """Format image metadata for logging purposes"""
         return f"""
-Image Processing Results:
-------------------------
-Basic Information:
-- Dimensions: {image_data['size']}
-- Format: {image_data['format']}
-- Color Mode: {image_data['mode']}
+                Image Processing Results:
+                ------------------------
+                Basic Information:
+                - Dimensions: {image_data['size']}
+                - Format: {image_data['format']}
+                - Color Mode: {image_data['mode']}
 
-Caption:
-{image_data['caption']}
+                Caption:
+                {image_data['caption']}
 
-Detected Objects ({len(image_data['regions'])}):
-{chr(10).join([f'- {r["label"]} (confidence: {r["score"]:.2f})' for r in image_data['regions']])}
+                Detected Objects ({len(image_data['regions'])}):
+                {chr(10).join([f'- {r["label"]} (confidence: {r["score"]:.2f})' for r in image_data['regions']])}
 
-Quality Metrics:
-- Brightness: {image_data['quality_metrics'].get('brightness', 'N/A'):.2f}
-- Contrast: {image_data['quality_metrics'].get('contrast', 'N/A'):.2f}
-- Sharpness: {image_data['quality_metrics'].get('sharpness', 'N/A'):.2f}
-- Aspect Ratio: {image_data['quality_metrics'].get('aspect_ratio', 'N/A'):.2f}
-- Resolution: {image_data['quality_metrics'].get('resolution', 'N/A')}
-"""
+                Quality Metrics:
+                - Brightness: {image_data['quality_metrics'].get('brightness', 'N/A'):.2f}
+                - Contrast: {image_data['quality_metrics'].get('contrast', 'N/A'):.2f}
+                - Sharpness: {image_data['quality_metrics'].get('sharpness', 'N/A'):.2f}
+                - Aspect Ratio: {image_data['quality_metrics'].get('aspect_ratio', 'N/A'):.2f}
+                - Resolution: {image_data['quality_metrics'].get('resolution', 'N/A')}
+                """
