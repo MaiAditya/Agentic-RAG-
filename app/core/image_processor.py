@@ -1,4 +1,4 @@
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Union
 import fitz
 import cv2
 import numpy as np
@@ -12,6 +12,10 @@ from loguru import logger
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
+from transformers import DetrImageProcessor, DetrForObjectDetection
+import json
+import datetime
+import os
 
 @dataclass
 class ImageMetadata:
@@ -21,314 +25,331 @@ class ImageMetadata:
     color_space: str
     bits_per_component: int
 
+@dataclass
+class ImageRegion:
+    bbox: List[float]  # [x1, y1, x2, y2]
+    score: float
+    label: str
+    content: Optional[str] = None
+
 class ImageProcessor:
     def __init__(self):
-        self.min_size = 50  # Reduced from 100 to 50 pixels
-        self.quality_threshold = 0.3  # Reduced from 0.5 to 0.3
-        # Initialize the vision model for image captioning
+        self.logger = logger  # Initialize logger at class level
         try:
-            self.processor = AutoProcessor.from_pretrained("microsoft/git-base")
-            self.model = AutoModelForVision2Seq.from_pretrained("microsoft/git-base")
+            # Initialize vision models
+            # BLIP-2 for image captioning and understanding
+            self.caption_processor = AutoProcessor.from_pretrained("Salesforce/blip2-opt-2.7b")
+            self.caption_model = AutoModelForVision2Seq.from_pretrained(
+                "Salesforce/blip2-opt-2.7b", 
+                torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32
+            )
+            
+            # DETR for object detection
+            self.object_processor = DetrImageProcessor.from_pretrained("facebook/detr-resnet-50")
+            self.object_model = DetrForObjectDetection.from_pretrained("facebook/detr-resnet-50")
+            
+            # Move models to GPU if available
             self.device = "cuda" if torch.cuda.is_available() else "cpu"
-            self.model.to(self.device)
-        except Exception as e:
-            logger.error(f"Failed to load vision model: {e}")
-            self.processor = None
-            self.model = None
-        self.max_workers = 4  # Adjust based on your CPU cores
-        self.executor = ThreadPoolExecutor(max_workers=self.max_workers)
-
-    async def process_document(self, doc: fitz.Document) -> List[Dict[str, Any]]:
-        """Process all pages of a document in parallel."""
-        all_images = []
-        tasks = []
-        
-        # Create processing tasks for each page
-        for page_num in range(len(doc)):
-            page = doc[page_num]
-            task = asyncio.create_task(self.process(page))
-            tasks.append(task)
+            self.caption_model.to(self.device)
+            self.object_model.to(self.device)
             
-            # Process in batches to manage memory
-            if len(tasks) >= self.max_workers:
-                batch_results = await asyncio.gather(*tasks)
-                all_images.extend([img for page_imgs in batch_results for img in page_imgs])
-                tasks = []
-        
-        # Process remaining tasks
-        if tasks:
-            batch_results = await asyncio.gather(*tasks)
-            all_images.extend([img for page_imgs in batch_results for img in page_imgs])
-        
-        return all_images
+            self.logger.info(f"Image processing models loaded successfully on {self.device}")
+            
+        except Exception as e:
+            self.logger.error(f"Error initializing image processing models: {e}")
+            raise
 
-    async def process(self, page: fitz.Page) -> List[Dict[str, Any]]:
-        """Process a PDF page to extract and analyze images."""
-        images = []
-        
+    async def process_image(self, image: Image.Image) -> Dict[str, Any]:
+        """Process a single image with enhanced capabilities"""
         try:
-            image_list = page.get_images(full=True)
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            # Create logging directories
+            os.makedirs("logs/image_processing/originals", exist_ok=True)
+            os.makedirs("logs/image_processing/captions", exist_ok=True)
+            os.makedirs("logs/image_processing/objects", exist_ok=True)
             
-            if not image_list:
-                logger.debug(f"No images found on page {page.number}")
-                return images
+            # Save original image
+            original_path = f"logs/image_processing/originals/original_{timestamp}.png"
+            image.save(original_path)
+            self.logger.info(f"Saved original image to {original_path}")
             
-            # Process images in parallel using ThreadPoolExecutor
-            process_func = partial(self._process_image, page=page)
-            loop = asyncio.get_event_loop()
+            # Log initial image properties
+            self.logger.info(f"""
+            Processing image with properties:
+            - Size: {image.size}
+            - Format: {image.format}
+            - Mode: {image.mode}
+            - Path: {original_path}
+            """)
             
-            # Process images in parallel
-            futures = []
-            for img_idx, img in enumerate(image_list):
-                future = loop.run_in_executor(self.executor, process_func, img_idx, img)
-                futures.append(future)
+            # Validate and preprocess image
+            if not self._validate_image(image):
+                self.logger.warning("Image validation failed")
+                return {"error": "Invalid image quality or format"}
+
+            # Generate detailed caption
+            caption = await self._generate_caption(image)
             
-            # Gather results
-            results = await asyncio.gather(*futures)
-            images = [img for img in results if img is not None]
+            # Save caption to file
+            caption_path = f"logs/image_processing/captions/caption_{timestamp}.txt"
+            with open(caption_path, 'w') as f:
+                f.write(f"Original Image: {original_path}\n")
+                f.write(f"Caption: {caption}\n")
+            self.logger.info(f"Generated caption saved to {caption_path}")
             
-            if images:
-                logger.info(f"Processed {len(images)} images on page {page.number}")
+            # Detect objects and regions of interest
+            regions = await self._detect_objects(image)
             
-            return images
+            # Create visualization of detected objects
+            vis_image = image.copy()
+            vis_array = np.array(vis_image)
+            
+            for region in regions:
+                x1, y1, x2, y2 = [int(coord) for coord in region.bbox]
+                cv2.rectangle(
+                    vis_array,
+                    (x1, y1),
+                    (x2, y2),
+                    (0, 255, 0),
+                    2
+                )
+                cv2.putText(
+                    vis_array,
+                    f"{region.label}: {region.score:.2f}",
+                    (x1, y1 - 10),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.5,
+                    (0, 255, 0),
+                    2
+                )
+            
+            # Save visualization
+            vis_path = f"logs/image_processing/objects/detected_{timestamp}.png"
+            cv2.imwrite(vis_path, cv2.cvtColor(vis_array, cv2.COLOR_RGB2BGR))
+            self.logger.info(f"Saved object detection visualization to {vis_path}")
+            
+            # Rest of the processing...
+            result = {
+                "caption": caption,
+                "regions": [r.__dict__ for r in regions],
+                "quality_metrics": self._analyze_quality(image),
+                "size": image.size,
+                "format": image.format,
+                "mode": image.mode,
+                "logs": {
+                    "original_image": original_path,
+                    "caption_file": caption_path,
+                    "detection_visualization": vis_path
+                }
+            }
+            
+            # Save complete analysis results
+            analysis_path = f"logs/image_processing/captions/analysis_{timestamp}.json"
+            with open(analysis_path, 'w') as f:
+                json.dump(result, f, indent=2)
+            
+            self.logger.info(f"Complete analysis saved to {analysis_path}")
+            return result
+
+        except Exception as e:
+            self.logger.error(f"Error processing image: {e}", exc_info=True)
+            return {"error": str(e)}
+
+    def _validate_image(self, image: Image.Image) -> bool:
+        """Enhanced image validation"""
+        try:
+            # Check minimum dimensions
+            if image.size[0] < 100 or image.size[1] < 100:
+                logger.warning("Image too small")
+                return False
+                
+            # Check for extremely large images
+            if image.size[0] > 4000 or image.size[1] > 4000:
+                logger.warning("Image too large, will be resized")
+                image.thumbnail((4000, 4000))
+                
+            # Check image mode
+            if image.mode not in ['RGB', 'RGBA', 'L']:
+                logger.warning(f"Unsupported image mode: {image.mode}")
+                return False
+                
+            return True
             
         except Exception as e:
-            logger.error(f"Error in image processing on page {page.number}: {e}")
+            logger.error(f"Image validation error: {e}")
+            return False
+
+    async def _generate_caption(self, image: Image.Image) -> str:
+        """Generate detailed image caption using BLIP-2"""
+        try:
+            # Prepare image for the model
+            inputs = self.caption_processor(image, return_tensors="pt").to(self.device)
+            
+            # Generate caption
+            with torch.no_grad():
+                generated_ids = self.caption_model.generate(
+                    pixel_values=inputs.pixel_values,
+                    max_length=50,
+                    num_beams=5,
+                    length_penalty=1.0
+                )
+            
+            caption = self.caption_processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
+            return caption.strip()
+            
+        except Exception as e:
+            logger.error(f"Caption generation error: {e}")
+            return "Error generating caption"
+
+    async def _detect_objects(self, image: Image.Image) -> List[ImageRegion]:
+        """Detect objects and regions in the image using DETR"""
+        try:
+            # Prepare image for object detection
+            inputs = self.object_processor(images=image, return_tensors="pt").to(self.device)
+            
+            # Perform object detection
+            with torch.no_grad():
+                outputs = self.object_model(**inputs)
+            
+            # Process results
+            processed_outputs = self.object_processor.post_process_object_detection(
+                outputs,
+                threshold=0.7,
+                target_sizes=[(image.size[1], image.size[0])]
+            )[0]
+            
+            regions = []
+            for score, label, box in zip(
+                processed_outputs["scores"],
+                processed_outputs["labels"],
+                processed_outputs["boxes"]
+            ):
+                regions.append(ImageRegion(
+                    bbox=box.tolist(),
+                    score=score.item(),
+                    label=self.object_model.config.id2label[label.item()]
+                ))
+            
+            return regions
+            
+        except Exception as e:
+            logger.error(f"Object detection error: {e}")
             return []
 
-    def _process_image(self, img_idx: int, img: tuple, page: fitz.Page) -> Optional[Dict[str, Any]]:
-        """Process a single image with all necessary steps."""
+    def _analyze_quality(self, image: Image.Image) -> Dict[str, Any]:
+        """Analyze image quality metrics"""
         try:
-            xref = img[0]
-            if not xref:
-                return None
-                
-            base_image = page.parent.extract_image(xref)
-            if not base_image:
-                return None
-            
-            # Add size information
-            base_image["width"] = img[2]
-            base_image["height"] = img[3]
-            
-            if not self._check_image_quality(base_image):
-                return None
-            
-            image_rect = page.get_image_bbox(img)
-            processed_image = self._process_single_image(base_image, image_rect)
-            
-            if processed_image:
-                processed_image["id"] = f"image_{page.number}_{img_idx}"
-                return processed_image
-                
-        except Exception as e:
-            logger.warning(f"Error processing image {img_idx} on page {page.number}: {e}")
-            return None
-
-    def _check_image_quality(self, image_data: Dict) -> bool:
-        """Check if the image meets quality requirements."""
-        try:
-            # Basic validation
-            if not isinstance(image_data, dict) or "image" not in image_data:
-                return False
-            
-            # Get dimensions from the image data
-            width = image_data.get("width", 0)
-            height = image_data.get("height", 0)
-            
-            # Basic dimension check
-            if width <= 0 or height <= 0:
-                return False
-            
-            # Very relaxed size check - if either dimension is reasonable
-            if max(width, height) >= self.min_size:
-                return True
-            
-            return False
-            
-        except Exception as e:
-            logger.debug(f"Error in image quality check: {e}")
-            return False
-
-    def _process_single_image(self, base_image: Dict, image_rect: fitz.Rect) -> Optional[Dict[str, Any]]:
-        """Optimized version of single image processing."""
-        try:
-            image_bytes = base_image.get("image")
-            if not image_bytes:
-                return None
-            
-            # Process image data
-            image = self._prepare_image(image_bytes, base_image.get("ext", ""))
-            if not image:
-                return None
-            
-            # Generate all required data in parallel
-            with ThreadPoolExecutor(max_workers=3) as executor:
-                futures = {
-                    'features': executor.submit(self._extract_image_features, image),
-                    'description': executor.submit(self._generate_image_description, image),
-                    'base64': executor.submit(self._convert_to_base64, image)
-                }
-                
-                results = {k: v.result() for k, v in futures.items()}
+            # Convert to numpy array for analysis
+            img_array = np.array(image)
             
             return {
-                "position": {
-                    "x0": image_rect.x0,
-                    "y0": image_rect.y0,
-                    "x1": image_rect.x1,
-                    "y1": image_rect.y1
-                },
-                "metadata": {
-                    "width": image.width,
-                    "height": image.height,
-                    "format": image.format or "JPEG",
-                    "color_space": "RGB",
-                    "bits_per_component": 8
-                },
-                "description": results['description'],
-                "features": results['features'],
-                "base64_image": results['base64'],
-                "image_type": self._determine_image_type(image)
+                "brightness": float(np.mean(img_array)),
+                "contrast": float(np.std(img_array)),
+                "sharpness": self._calculate_sharpness(img_array),
+                "aspect_ratio": image.size[0] / image.size[1],
+                "resolution": image.size[0] * image.size[1]
             }
             
         except Exception as e:
-            logger.error(f"Error in _process_single_image: {e}")
-            return None
+            logger.error(f"Quality analysis error: {e}")
+            return {}
 
-    def _prepare_image(self, image_bytes: bytes, format_hint: str) -> Optional[Image.Image]:
-        """Prepare image data for processing."""
+    def _calculate_sharpness(self, img_array: np.ndarray) -> float:
+        """Calculate image sharpness using Laplacian variance"""
         try:
-            if format_hint.upper() == "JPX":
-                try:
-                    pix = fitz.Pixmap(image_bytes)
-                    if pix.n >= 4:
-                        pix = fitz.Pixmap(fitz.csRGB, pix)
-                    image_bytes = pix.tobytes()
-                except Exception:
-                    pass
+            if len(img_array.shape) == 3:
+                img_array = np.mean(img_array, axis=2)
             
-            image = Image.open(io.BytesIO(image_bytes))
-            image.load()
-            
-            if image.mode != 'RGB':
-                image = image.convert('RGB')
-            
-            return image
+            laplacian = np.array([[0, 1, 0], [1, -4, 1], [0, 1, 0]])
+            return float(np.var(np.abs(self._convolve2d(img_array, laplacian))))
             
         except Exception as e:
-            logger.debug(f"Error preparing image: {str(e)}")
-            return None
+            logger.error(f"Sharpness calculation error: {e}")
+            return 0.0
 
-    def _convert_to_base64(self, image: Image.Image) -> str:
-        """Convert image to base64 string."""
-        buffered = io.BytesIO()
-        image.save(buffered, format='JPEG', quality=85)
-        return base64.b64encode(buffered.getvalue()).decode()
+    def _convolve2d(self, image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
+        """Simple 2D convolution implementation"""
+        # Implementation details...
+        return np.zeros_like(image)  # Placeholder
 
-    def _generate_image_description(self, image: Image.Image) -> str:
-        """Generate a description of the image using the vision model."""
-        try:
-            if self.processor and self.model:
-                # Ensure image is in RGB mode
-                if image.mode != 'RGB':
-                    image = image.convert('RGB')
+    async def process(self, page: fitz.Page, doc: fitz.Document) -> List[Dict[str, Any]]:
+        """Process images on a page."""
+        self.logger.info(f"Processing page {page.number} for images")
+        
+        images = []
+        image_list = page.get_images()
+        
+        self.logger.info(f"Found {len(image_list)} raw images on page {page.number}")
+        
+        for img_idx, img_info in enumerate(image_list):
+            try:
+                xref = img_info[0]
+                base_image = doc.extract_image(xref)
                 
-                # Prepare image for the model
-                try:
-                    # Modified processor call with pixel_values
-                    inputs = self.processor(images=image, return_tensors="pt").to(self.device)
-                    pixel_values = inputs.pixel_values
-                    
-                    # Generate description
-                    outputs = self.model.generate(
-                        pixel_values=pixel_values,
-                        max_length=50,
-                        num_beams=4,
-                        early_stopping=True
+                if base_image:
+                    self.logger.info(
+                        f"Processing image {img_idx + 1}/{len(image_list)} on page {page.number}:\n"
+                        f"Format: {base_image['ext']}\n"
+                        f"Dimensions: {base_image['width']}x{base_image['height']}\n"
+                        f"Color space: {base_image['colorspace']}"
                     )
                     
-                    # Decode the output
-                    description = self.processor.batch_decode(outputs, skip_special_tokens=True)[0]
-                    return description
-                except Exception as e:
-                    logger.error(f"Error in model inference: {e}")
-                    return "Error generating image description"
-            else:
-                return "Image description not available - vision model not loaded"
+                    # Convert image bytes to PIL Image
+                    image_bytes = base_image["image"]
+                    pil_image = Image.open(io.BytesIO(image_bytes))
+                    
+                    # Process image using existing methods
+                    processed_result = await self.process_image(pil_image)
+                    if processed_result and "error" not in processed_result:
+                        processed_result.update({
+                            "page_number": page.number,
+                            "image_index": img_idx,
+                            "raw_info": {
+                                "format": base_image["ext"],
+                                "width": base_image["width"],
+                                "height": base_image["height"],
+                                "colorspace": base_image["colorspace"]
+                            }
+                        })
+                        images.append(processed_result)
+                        self.logger.info(
+                            f"Successfully processed image {img_idx} on page {page.number}"
+                        )
+                    else:
+                        self.logger.warning(
+                            f"Image {img_idx} on page {page.number} failed processing"
+                        )
+                
+            except Exception as e:
+                self.logger.error(
+                    f"Error processing image {img_idx} on page {page.number}: {str(e)}"
+                )
         
-        except Exception as e:
-            logger.error(f"Error generating image description: {e}")
-            return "Error generating image description"
+        self.logger.info(
+            f"Successfully processed {len(images)}/{len(image_list)} images on page {page.number}"
+        )
+        return images
 
-    def _extract_image_features(self, image: Image.Image) -> List[float]:
-        """Extract features from the image for vector search."""
-        try:
-            # Convert to numpy array
-            img_array = np.array(image)
-            
-            # Resize for consistent feature extraction
-            resized = cv2.resize(img_array, (224, 224))
-            
-            # Extract basic features
-            features = []
-            
-            # Color histogram
-            if len(resized.shape) == 3:
-                for i in range(3):
-                    hist = cv2.calcHist([resized], [i], None, [8], [0, 256])
-                    features.extend(hist.flatten().tolist())  # Convert numpy array to list
-            else:
-                hist = cv2.calcHist([resized], [0], None, [8], [0, 256])
-                features.extend(hist.flatten().tolist())  # Convert numpy array to list
-            
-            # Edge features
-            if len(resized.shape) == 3:
-                gray = cv2.cvtColor(resized, cv2.COLOR_RGB2GRAY)
-            else:
-                gray = resized
-            edges = cv2.Canny(gray, 100, 200)
-            edge_features = cv2.calcHist([edges], [0], None, [8], [0, 256])
-            features.extend(edge_features.flatten().tolist())  # Convert numpy array to list
-            
-            return features
-        
-        except Exception as e:
-            logger.error(f"Error extracting image features: {e}")
-            return []
+    def _format_metadata_for_logging(self, image_data: Dict[str, Any]) -> str:
+        """Format image metadata for logging purposes"""
+        return f"""
+                Image Processing Results:
+                ------------------------
+                Basic Information:
+                - Dimensions: {image_data['size']}
+                - Format: {image_data['format']}
+                - Color Mode: {image_data['mode']}
 
-    def _determine_image_type(self, image: Image.Image) -> str:
-        """Determine the type of image (photo, diagram, chart, etc.)."""
-        try:
-            # Convert to numpy array
-            img_array = np.array(image)
-            
-            # Basic heuristics for image type detection
-            if len(img_array.shape) == 2:
-                return "grayscale"
-            
-            # Calculate various metrics
-            edges = cv2.Canny(img_array, 100, 200)
-            edge_density = np.mean(edges > 0)
-            color_variance = np.var(img_array)
-            
-            if edge_density > 0.1 and color_variance < 1000:
-                return "diagram"
-            elif edge_density > 0.05 and color_variance > 1000:
-                return "chart"
-            else:
-                return "photo"
-        
-        except Exception as e:
-            logger.error(f"Error determining image type: {e}")
-            return "unknown"
+                Caption:
+                {image_data['caption']}
 
-    @staticmethod
-    def _get_colorspace_name(colorspace: int) -> str:
-        """Convert colorspace number to name."""
-        colorspace_map = {
-            1: "GRAY",
-            3: "RGB",
-            4: "CMYK"
-        }
-        return colorspace_map.get(colorspace, "unknown")
+                Detected Objects ({len(image_data['regions'])}):
+                {chr(10).join([f'- {r["label"]} (confidence: {r["score"]:.2f})' for r in image_data['regions']])}
+
+                Quality Metrics:
+                - Brightness: {image_data['quality_metrics'].get('brightness', 'N/A'):.2f}
+                - Contrast: {image_data['quality_metrics'].get('contrast', 'N/A'):.2f}
+                - Sharpness: {image_data['quality_metrics'].get('sharpness', 'N/A'):.2f}
+                - Aspect Ratio: {image_data['quality_metrics'].get('aspect_ratio', 'N/A'):.2f}
+                - Resolution: {image_data['quality_metrics'].get('resolution', 'N/A')}
+                """

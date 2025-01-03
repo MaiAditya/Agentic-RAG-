@@ -21,6 +21,7 @@ class TextBlock:
 
 class TextProcessor:
     def __init__(self):
+        self.logger = logger  # Initialize logger at class level
         self.min_block_length = 10
         try:
             # Try to load the model, download if not present
@@ -35,27 +36,35 @@ class TextProcessor:
             self.nlp = None
 
     async def process(self, page: fitz.Page) -> List[Dict[str, Any]]:
-        """Process text content from a PDF page."""
-        try:
-            # Extract raw text blocks with formatting
-            raw_blocks = self._extract_raw_blocks(page)
-            
-            # Process and structure the blocks
-            processed_blocks = []
-            for idx, block in enumerate(raw_blocks):
-                if self._is_valid_block(block):
-                    processed_block = await self._process_block(block, idx)
-                    if processed_block:
-                        processed_blocks.append(processed_block)
-            
-            # Analyze document structure
-            structured_blocks = self._analyze_document_structure(processed_blocks)
-            
-            return structured_blocks
+        """Process text blocks on a page."""
+        self.logger.info(f"Processing page {page.number} for text blocks")
         
-        except Exception as e:
-            logger.error(f"Error processing page text: {e}")
-            return []
+        # Extract text blocks
+        blocks = page.get_text("blocks")
+        self.logger.info(f"Found {len(blocks)} raw text blocks on page {page.number}")
+        
+        processed_blocks = []
+        for idx, block in enumerate(blocks):
+            try:
+                processed_block = self._process_block(block)
+                if processed_block:
+                    self.logger.info(
+                        f"Processed text block {idx + 1}/{len(blocks)} on page {page.number}:\n"
+                        f"Position: ({block[0]:.1f}, {block[1]:.1f}, {block[2]:.1f}, {block[3]:.1f})\n"
+                        f"Word count: {len(processed_block['text'].split())}\n"
+                        f"Content preview: {processed_block['text'][:100]}..."
+                    )
+                    processed_blocks.append(processed_block)
+                
+            except Exception as e:
+                self.logger.error(
+                    f"Error processing text block {idx} on page {page.number}: {str(e)}"
+                )
+        
+        self.logger.info(
+            f"Successfully processed {len(processed_blocks)}/{len(blocks)} text blocks on page {page.number}"
+        )
+        return processed_blocks
 
     def _extract_raw_blocks(self, page: fitz.Page) -> List[Dict]:
         """Extract raw text blocks with formatting information."""

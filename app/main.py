@@ -11,6 +11,7 @@ import uvicorn
 from loguru import logger
 from app.core.logger import logger  # This will configure the logger
 import uuid
+from app.language_models.llm import create_llm
 
 def initialize_nltk():
     """Initialize NLTK with all required resources."""
@@ -54,10 +55,28 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize components
-pdf_processor = PDFProcessor()
-chroma_client = ChromaDBClient()
-pdf_agent = PDFAgent(pdf_processor, chroma_client)
+# Global components
+pdf_agent = None
+chroma_client = None
+
+async def init_components():
+    """Initialize all components needed for the application."""
+    global chroma_client
+    
+    pdf_processor = PDFProcessor()
+    chroma_client = ChromaDBClient()
+    llm = await create_llm()
+    
+    pdf_agent = PDFAgent(
+        pdf_processor=pdf_processor,
+        chroma_client=chroma_client
+    )
+    return pdf_agent
+
+@app.on_event("startup")
+async def startup_event():
+    global pdf_agent
+    pdf_agent = await init_components()
 
 @app.post("/process-pdf")
 async def process_pdf(file: UploadFile = File(...)):
@@ -69,20 +88,23 @@ async def process_pdf(file: UploadFile = File(...)):
         logger.info(f"Processing PDF file: {file.filename}")
         contents = await file.read()
         file_size = len(contents)
-        logger.info(f"File size: {file_size} bytes")
         
         if file_size == 0:
             raise HTTPException(status_code=400, detail="Empty PDF file")
         
+        # Process the PDF
         result = await pdf_agent.process_pdf(contents)
-        logger.info("PDF processing completed successfully")
+        
+        # Get updated collection stats
+        stats = await chroma_client.get_collection_stats()
         
         return JSONResponse(
             content={
                 "status": "success", 
                 "message": "PDF processed successfully",
                 "file_size": file_size,
-                "details": result
+                "details": result,
+                "collection_stats": stats
             },
             status_code=200
         )
@@ -91,47 +113,164 @@ async def process_pdf(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error(f"Error processing PDF: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
-
+        raise HTTPException(status_code=500, detail=str(e))
 @app.post("/query")
-async def query(query: str):
+async def query(query: dict):
     """
     Query the processed PDF contents.
     """
     try:
-        response = await pdf_agent.answer_query(query)
+        logger.info(f"Received query request: {json.dumps(query, indent=2)}")
+        
+        if not pdf_agent:
+            raise HTTPException(
+                status_code=500,
+                detail="PDF Agent not properly initialized"
+            )
+            
+        if not query or "query" not in query:
+            logger.warning("Invalid query format - missing 'query' field")
+            raise HTTPException(status_code=400, detail="Query must be provided in request body")
+            
+        query_text = query["query"].strip()
+        if not query_text:
+            logger.warning("Empty query text received")
+            raise HTTPException(status_code=400, detail="Query text cannot be empty")
+        
+        # Extract optional filters
+        filters = query.get("filters", {})
+        min_similarity = filters.get("min_similarity", 0.3)
+        content_types = filters.get("content_type", ["text", "tables", "images"])
+        page = filters.get("page")
+        
+        logger.info(f"""
+        Processing query with parameters:
+        - Query text: {query_text}
+        - Min similarity: {min_similarity}
+        - Content types: {content_types}
+        - Page filter: {page}
+        """)
+        
+        # Get collection stats before query
+        pre_query_stats = await chroma_client.get_collection_stats()
+        logger.info(f"Collection stats before query: {json.dumps(pre_query_stats, indent=2)}")
+        
+        response = await pdf_agent.answer_query(
+            query_text,
+            min_similarity=min_similarity,
+            content_types=content_types,
+            page=page
+        )
+        
+        if not response:
+            logger.warning(f"""
+            No results found for query:
+            - Query text: {query_text}
+            - Content types searched: {content_types}
+            - Min similarity threshold: {min_similarity}
+            """)
+            return JSONResponse(
+                content={
+                    "status": "no_results",
+                    "message": "No relevant information found",
+                    "response": None,
+                    "debug_info": {
+                        "collection_stats": pre_query_stats,
+                        "query_parameters": {
+                            "text": query_text,
+                            "filters": filters
+                        }
+                    }
+                },
+                status_code=200
+            )
+            
+        logger.info(f"Query successful - Found relevant information: {json.dumps(response, indent=2)}")
         return JSONResponse(
-            content={"status": "success", "response": response},
+            content={
+                "status": "success", 
+                "response": response,
+                "query": query_text,
+                "metadata": {
+                    "filters_applied": filters,
+                    "content_types_searched": content_types,
+                    "collection_stats": pre_query_stats
+                }
+            },
             status_code=200
         )
+        
     except Exception as e:
-        logger.error(f"Error processing query: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Error processing query: {str(e)}", exc_info=True)
+        logger.error(f"Query details: {json.dumps(query, indent=2)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error processing query: {str(e)}"
+        )
 
 @app.get("/health")
 async def health_check():
-    """
-    Health check endpoint.
-    """
+    """Health check endpoint."""
     try:
-        stats = await chroma_client.get_collection_stats()
-        return {
-            "status": "healthy",
-            "chroma_db": stats
+        # Check ChromaDB collections
+        collection_stats = await chroma_client.get_collection_stats()
+        
+        # Check if collections exist and have documents
+        collections_health = {
+            "text": collection_stats.get("text", {}).get("count", 0) > 0,
+            "tables": collection_stats.get("tables", {}).get("count", 0) > 0,
+            "images": collection_stats.get("images", {}).get("count", 0) > 0
         }
+        
+        return JSONResponse(
+            content={
+                "status": "healthy",
+                "collections": collections_health,
+                "chroma_db": collection_stats
+            },
+            status_code=200
+        )
     except Exception as e:
         logger.error(f"Health check failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/stats")
 async def get_stats():
-    """
-    Get statistics about the document collections.
-    """
+    """Get detailed statistics about document collections."""
     try:
         stats = await chroma_client.get_collection_stats()
+        
+        # Add more detailed statistics
+        detailed_stats = {
+            "collections": {},
+            "total_documents": 0,
+            "health": {
+                "all_collections_exist": True,
+                "total_collections": len(stats)
+            }
+        }
+        
+        for collection_name in ["text", "tables", "images"]:
+            collection_info = stats.get(collection_name, {})
+            doc_count = collection_info.get("count", 0)
+            exists = collection_info.get("exists", False)
+            
+            detailed_stats["collections"][collection_name] = {
+                "count": doc_count,
+                "has_documents": doc_count > 0,
+                "exists": exists,
+                "error": collection_info.get("error")
+            }
+            
+            detailed_stats["total_documents"] += doc_count
+            if not exists:
+                detailed_stats["health"]["all_collections_exist"] = False
+        
         return JSONResponse(
-            content={"status": "success", "stats": stats},
+            content={
+                "status": "success",
+                "stats": detailed_stats
+            },
             status_code=200
         )
     except Exception as e:

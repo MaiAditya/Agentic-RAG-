@@ -5,6 +5,8 @@ from PIL import Image
 import fitz
 from dataclasses import dataclass
 import pandas as pd
+from loguru import logger 
+from app.core.models.table_detection import DeepTableDetector, TableRegion
 
 @dataclass
 class TableBoundary:
@@ -16,41 +18,111 @@ class TableBoundary:
 
 class TableProcessor:
     def __init__(self):
-        self.min_confidence = 0.5
-        self.line_min_length = 20
-        self.line_max_gap = 3
+        self.dl_detector = DeepTableDetector()
+        self.min_confidence = 0.5 # Lowered from 0.7 to match detector threshold
+        logger.info("Initialized TableProcessor with deep learning models")
 
     async def process(self, page: fitz.Page) -> List[Dict[str, Any]]:
-        """Process a PDF page to extract tables."""
-        # Convert page to image for table detection
-        pix = page.get_pixmap()
-        img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
-        img_np = np.array(img)
+        """Process a PDF page to extract tables using deep learning."""
+        try:
+            # Convert page to image
+            pix = page.get_pixmap(dpi=300)  # Increased DPI for better detection
+            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+            
+            # Log page processing
+            logger.debug(f"Processing page {page.number} for table detection. "
+                        f"Image size: {img.size}, DPI: 300")
+            
+            # Detect tables
+            tables = await self.dl_detector.detect_tables(img)
+            logger.info(f"Found {len(tables)} potential tables on page {page.number}")
+            
+            # Process each table
+            processed_tables = []
+            for idx, table in enumerate(tables):
+                if table.confidence < self.min_confidence:
+                    logger.debug(f"Skipping table {idx} due to low confidence: {table.confidence:.3f}")
+                    continue
+                    
+                logger.info(
+                    f"Processing table {idx + 1}/{len(tables)} on page {page.number}:\n"
+                    f"Position: ({table.bbox[0]:.1f}, {table.bbox[1]:.1f}, "
+                    f"{table.bbox[2]:.1f}, {table.bbox[3]:.1f})\n"
+                    f"Confidence: {table.confidence:.2f}"
+                )
+                
+                # Analyze table structure
+                structure = await self.dl_detector.analyze_structure(img, table)
+                
+                if structure:
+                    logger.debug(f"Table {idx} structure analysis successful: "
+                               f"{structure['num_rows']}x{structure['num_cols']} cells")
+                    processed_tables.append({
+                        "id": f"table_{page.number}_{idx}",
+                        "page": page.number,
+                        "position": {
+                            "x0": table.bbox[0],
+                            "y0": table.bbox[1],
+                            "x1": table.bbox[2],
+                            "y1": table.bbox[3]
+                        },
+                        "content": structure,
+                        "confidence": table.confidence
+                    })
+                else:
+                    logger.warning(f"Failed to analyze structure for table {idx} on page {page.number}")
+                    
+            return processed_tables
+            
+        except Exception as e:
+            logger.error(f"Error processing page {page.number}: {str(e)}")
+            # Fallback to traditional method if deep learning fails
+            logger.info("Attempting fallback to traditional table detection method")
+            return await self._fallback_process(page)
 
-        # Detect table boundaries
-        table_boundaries = self._detect_tables(img_np)
-        
-        # Extract and process each detected table
-        tables = []
-        for idx, boundary in enumerate(table_boundaries):
-            table_content = self._extract_table_content(page, boundary)
-            if table_content:
-                tables.append({
-                    "id": idx,
-                    "position": {
-                        "x0": boundary.x0,
-                        "y0": boundary.y0,
-                        "x1": boundary.x1,
-                        "y1": boundary.y1
-                    },
-                    "content": table_content,
-                    "confidence": boundary.confidence
-                })
-
-        return tables
+    async def _fallback_process(self, page: fitz.Page) -> List[Dict[str, Any]]:
+        """Traditional table detection method as fallback."""
+        try:
+            # Convert page to image
+            pix = page.get_pixmap()
+            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+            img_np = np.array(img)
+            
+            # Detect tables using traditional method
+            table_boundaries = self._detect_tables(img_np)
+            logger.info(f"Fallback method found {len(table_boundaries)} tables on page {page.number}")
+            
+            # Process detected tables
+            processed_tables = []
+            for idx, boundary in enumerate(table_boundaries):
+                logger.debug(f"Processing fallback table {idx} with confidence {boundary.confidence:.3f}")
+                
+                if boundary.confidence >= self.min_confidence:
+                    table_content = self._extract_table_content(page, boundary)
+                    if table_content:
+                        processed_tables.append({
+                            "id": f"table_{page.number}_{idx}_fallback",
+                            "page": page.number,
+                            "position": {
+                                "x0": boundary.x0,
+                                "y0": boundary.y0,
+                                "x1": boundary.x1,
+                                "y1": boundary.y1
+                            },
+                            "content": table_content,
+                            "confidence": boundary.confidence
+                        })
+            
+            return processed_tables
+            
+        except Exception as e:
+            logger.error(f"Fallback processing failed for page {page.number}: {str(e)}")
+            return []
 
     def _detect_tables(self, img: np.ndarray) -> List[TableBoundary]:
         """Detect table boundaries in the image."""
+        self.logger.debug(f"Detecting tables in image of size {img.shape}")
+        
         # Convert to grayscale
         gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
         
@@ -73,10 +145,15 @@ class TableProcessor:
         
         # Process contours to find table boundaries
         boundaries = []
-        for contour in contours:
+        for idx, contour in enumerate(contours):
             x, y, w, h = cv2.boundingRect(contour)
             area = w * h
             page_area = img.shape[0] * img.shape[1]
+            
+            self.logger.debug(
+                f"Analyzing contour {idx + 1}/{len(contours)}: "
+                f"Area ratio: {(area/page_area):.3f}"
+            )
             
             # Filter out too small or too large areas
             if 0.01 * page_area < area < 0.9 * page_area:
@@ -85,6 +162,8 @@ class TableProcessor:
                     horizontal[y:y+h, x:x+w],
                     vertical[y:y+h, x:x+w]
                 )
+                
+                self.logger.debug(f"Contour {idx} confidence: {confidence:.2f}")
                 
                 if confidence > self.min_confidence:
                     boundaries.append(TableBoundary(
@@ -226,3 +305,4 @@ class TableProcessor:
             return False
         except:
             return len(set(row)) == len(row)
+

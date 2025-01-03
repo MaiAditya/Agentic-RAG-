@@ -21,48 +21,7 @@ class PDFProcessor:
         self.max_workers = max(multiprocessing.cpu_count() - 1, 2)
         self.executor = ThreadPoolExecutor(max_workers=self.max_workers)
 
-    async def process_pdf(self, file_path: str) -> Dict[str, Any]:
-        """Process a PDF file from disk using parallel processing."""
-        try:
-            doc = fitz.open(file_path)
-            metadata = await self._extract_metadata(doc)
-            
-            # Create a list to store futures
-            futures = []
-            loop = asyncio.get_event_loop()
-            
-            # Submit all pages for processing
-            for page_num in range(len(doc)):
-                future = loop.run_in_executor(
-                    self.executor,
-                    self._process_page_sync,
-                    doc[page_num],
-                    page_num
-                )
-                futures.append(future)
-            
-            # Process all pages in parallel and collect results
-            pages = []
-            for completed_future in await asyncio.gather(*futures):
-                if completed_future:
-                    pages.append(completed_future)
-            
-            # Sort pages by page number to maintain order
-            pages.sort(key=lambda x: x['page_num'])
-            
-            return {
-                "pages": pages,
-                "metadata": metadata
-            }
-
-        except Exception as e:
-            logger.error(f"Error processing PDF file {file_path}: {e}")
-            return None
-        finally:
-            if 'doc' in locals():
-                doc.close()
-
-    def _process_page_sync(self, page: fitz.Page, page_num: int) -> Dict[str, Any]:
+    def _process_page_sync(self, page: fitz.Page, page_num: int, doc: fitz.Document) -> Dict[str, Any]:
         """Process a single page synchronously."""
         try:
             # Create a new event loop for this thread
@@ -75,7 +34,7 @@ class PDFProcessor:
                     asyncio.gather(
                         self.text_processor.process(page),
                         self.table_processor.process(page),
-                        self.image_processor.process(page),
+                        self.image_processor.process(page, doc),
                         self._analyze_layout(page)
                     )
                 )
@@ -101,7 +60,7 @@ class PDFProcessor:
             }
 
     async def process(self, content: bytes) -> Dict[str, Any]:
-        """Process a PDF file and extract its contents."""
+        """Process a PDF file and extract its contents in parallel."""
         try:
             # Load PDF
             doc = fitz.open(stream=content, filetype="pdf")
@@ -112,12 +71,60 @@ class PDFProcessor:
                 "metadata": doc.metadata
             }
             
-            # Process each page
-            for page_num, page in enumerate(doc):
-                logger.info(f"Processing page {page_num + 1}")
+            # Create futures for parallel processing
+            futures = []
+            loop = asyncio.get_event_loop()
+            
+            # Submit all pages for processing
+            for page_num in range(len(doc)):
+                future = loop.run_in_executor(
+                    self.executor,
+                    self._process_single_page_sync,
+                    doc[page_num],
+                    page_num,
+                    doc
+                )
+                futures.append(future)
+            
+            # Process all pages in parallel and collect results
+            pages = []
+            for completed_future in await asyncio.gather(*futures):
+                if completed_future:
+                    pages.append(completed_future)
+            
+            # Sort pages by page number to maintain order
+            pages.sort(key=lambda x: x['page'])
+            result["pages"] = pages
+            
+            # Log summary
+            logger.debug("Extracted content summary: " + json.dumps({
+                'page_count': len(pages),
+                'has_text': any(page.get('text') for page in pages),
+                'total_images': sum(len(page.get('images', [])) for page in pages),
+                'total_tables': sum(len(page.get('tables', [])) for page in pages)
+            }))
+            
+            return result
+            
+        except Exception as e:
+            logger.error(f"Error processing PDF: {str(e)}")
+            raise
+        finally:
+            if 'doc' in locals():
+                doc.close()
+
+    def _process_single_page_sync(self, page: fitz.Page, page_num: int, doc: fitz.Document) -> Dict[str, Any]:
+        """Process a single page synchronously."""
+        try:
+            # Create a new event loop for this thread
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            
+            try:
+                # Process all elements
                 page_content = {
                     "page": page_num,
-                    "text": page.get_text(),
+                    "text": "",
                     "images": [],
                     "tables": []
                 }
@@ -128,33 +135,38 @@ class PDFProcessor:
                     logger.info(f"Found {len(text_blocks)} text blocks on page {page_num + 1}")
                     page_content["text"] = "\n".join([block[4] for block in text_blocks if isinstance(block[4], str)])
                 
-                # Extract images if present
-                images = await self.image_processor.process(page)
+                # Process all elements concurrently within this thread
+                images, tables, layout = loop.run_until_complete(
+                    asyncio.gather(
+                        self.image_processor.process(page, doc),
+                        self.table_processor.process(page),
+                        self._analyze_layout(page)
+                    )
+                )
+                
                 if images:
-                    logger.info(f"Found {len(images)} images on page {page_num + 1}")
                     page_content["images"] = images
+                    logger.info(f"Found {len(images)} images on page {page_num + 1}")
                 
-                # Extract tables if present
-                tables = await self.table_processor.process(page)
                 if tables:
-                    logger.info(f"Found {len(tables)} tables on page {page_num + 1}")
                     page_content["tables"] = tables
+                    logger.info(f"Found {len(tables)} tables on page {page_num + 1}")
                 
-                result["pages"].append(page_content)
-            
-            # Log summary in a single line
-            logger.debug("Extracted content summary: " + json.dumps({
-                'page_count': len(result['pages']),
-                'has_text': any(page.get('text') for page in result['pages']),
-                'total_images': sum(len(page.get('images', [])) for page in result['pages']),
-                'total_tables': sum(len(page.get('tables', [])) for page in result['pages'])
-            }))
-            
-            return result
-            
+                page_content["layout"] = layout
+                return page_content
+                
+            finally:
+                loop.close()
+                
         except Exception as e:
-            logger.error(f"Error processing PDF: {str(e)}")
-            raise
+            logger.error(f"Error processing page {page_num}: {e}")
+            return {
+                "page": page_num,
+                "text": "",
+                "images": [],
+                "tables": [],
+                "layout": {}
+            }
 
     async def _analyze_layout(self, page: fitz.Page) -> Dict[str, Any]:
         """Analyze the layout of a page."""
@@ -207,67 +219,61 @@ class PDFProcessor:
         documents = []
         
         try:
-            # Process text content
-            if "text" in content:
-                logger.info("Processing text content")
-                # Ensure text content is a string
-                text_content = str(content["text"]) if content["text"] else ""
-                if text_content.strip():  # Only add if there's actual content
+            # Process each page's content
+            for page in content.get("pages", []):
+                page_num = page.get("page", 0)
+                
+                # Process text content
+                if page.get("text"):
                     text_doc = {
                         "id": f"text_{uuid.uuid4()}",
                         "type": "text",
-                        "content": text_content,
+                        "content": page["text"],
                         "metadata": {
                             "source": "text",
-                            "page": content.get("page", 0)
+                            "page": page_num
                         }
                     }
                     documents.append(text_doc)
-                    logger.info(f"Added text document with ID: {text_doc['id']}, content length: {len(text_content)}")
-
-            # Process images
-            if "images" in content and isinstance(content["images"], list):
-                logger.info(f"Processing {len(content['images'])} images")
-                for idx, img in enumerate(content["images"]):
-                    caption = str(img.get("caption", "")) if img.get("caption") else ""
-                    if caption.strip():  # Only add if there's a caption
+                    logger.info(f"Created text document for page {page_num}")
+                
+                # Process images
+                for idx, img in enumerate(page.get("images", [])):
+                    if img.get("caption"):
                         image_doc = {
                             "id": f"image_{uuid.uuid4()}",
                             "type": "images",
-                            "content": caption,
+                            "content": img["caption"],
                             "metadata": {
                                 "source": "image",
-                                "page": content.get("page", 0),
-                                "position": img.get("position"),
-                                "index": idx
+                                "page": page_num,
+                                "index": idx,
+                                "position": img.get("position", {})
                             }
                         }
                         documents.append(image_doc)
-                        logger.info(f"Added image document with ID: {image_doc['id']}, caption length: {len(caption)}")
-
-            # Process tables
-            if "tables" in content and isinstance(content["tables"], list):
-                logger.info(f"Processing {len(content['tables'])} tables")
-                for idx, table in enumerate(content["tables"]):
-                    table_content = str(table.get("content", "")) if table.get("content") else ""
-                    if table_content.strip():  # Only add if there's content
+                        logger.info(f"Created image document for page {page_num}, image {idx}")
+                
+                # Process tables
+                for idx, table in enumerate(page.get("tables", [])):
+                    if table.get("content"):
                         table_doc = {
                             "id": f"table_{uuid.uuid4()}",
                             "type": "tables",
-                            "content": table_content,
+                            "content": table["content"],
                             "metadata": {
                                 "source": "table",
-                                "page": content.get("page", 0),
-                                "position": table.get("position"),
-                                "index": idx
+                                "page": page_num,
+                                "index": idx,
+                                "position": table.get("position", {})
                             }
                         }
                         documents.append(table_doc)
-                        logger.info(f"Added table document with ID: {table_doc['id']}, content length: {len(table_content)}")
+                        logger.info(f"Created table document for page {page_num}, table {idx}")
+
+            logger.info(f"Processed {len(documents)} total documents")
+            return documents
 
         except Exception as e:
-            logger.error(f"Error processing content: {str(e)}")
+            logger.error(f"Error processing content into documents: {str(e)}")
             raise
-
-        logger.info(f"Processed {len(documents)} total documents")
-        return documents

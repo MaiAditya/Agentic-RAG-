@@ -25,10 +25,17 @@ Context: {context}
 Let's solve this step by step:
 Thought:"""
 
-QUERY_PROMPT = """Based on the following context, please answer the question.
+QUERY_PROMPT = """Based on the following context from different sources (text, tables, and images), please answer the question.
+When referencing information from tables or images, clearly indicate the source.
 
 Context: {context}
 
 Question: {query}
+
+Instructions:
+1. Base your answer only on the provided context
+2. Clearly reference any tables or images used
+3. If the information isn't available, say so
+4. Keep the answer clear and concise
 
 Answer:"""

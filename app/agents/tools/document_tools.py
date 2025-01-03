@@ -1,15 +1,15 @@
 from .base import PDFTool
 from typing import Dict, Any
 from pydantic import Field
+from loguru import logger
 
 class DocumentSearchTool(PDFTool):
     name = "document_search"
-    description: str = "Search for relevant information in the document"
+    description: str = "Search for relevant information in the document using keywords or phrases"
     chroma_client: Any = Field(description="ChromaDB client for document search")
     
     def __init__(self, chroma_client):
         super().__init__()
-        # Use object.__setattr__ to bypass Pydantic validation during initialization
         object.__setattr__(self, "chroma_client", chroma_client)
         
     def _run(self, query: str) -> Dict[str, Any]:
@@ -17,12 +17,56 @@ class DocumentSearchTool(PDFTool):
         raise NotImplementedError("Use async version of this tool")
         
     async def _arun(self, query: str) -> Dict[str, Any]:
-        results = await self.chroma_client.query(query, limit=3)
-        return {
-            "type": "text",
-            "content": results,
-            "source": "document_search"
-        }
+        """Search across all collections for relevant information."""
+        try:
+            logger.info(f"Executing document search with query: {query}")
+            results = []
+            collections = ["text", "tables", "images"]
+            
+            for collection in collections:
+                try:
+                    collection_results = await self.chroma_client.query_collection(
+                        collection_name=collection,
+                        query_text=query,
+                        n_results=3
+                    )
+                    
+                    if collection_results and isinstance(collection_results, dict):
+                        # Extract documents and metadata
+                        documents = collection_results.get("documents", [[]])[0]
+                        metadatas = collection_results.get("metadatas", [[]])[0]
+                        distances = collection_results.get("distances", [[]])[0]
+                        
+                        # Process each document with its metadata and distance
+                        for idx, (doc, meta) in enumerate(zip(documents, metadatas)):
+                            result_item = {
+                                "content": doc,
+                                "metadata": meta,
+                                "source": collection,
+                                "score": 1.0 - (distances[idx] if idx < len(distances) else 0)
+                            }
+                            results.append(result_item)
+                        
+                        logger.info(f"Found {len(documents)} results in {collection}")
+                        
+                except Exception as e:
+                    logger.warning(f"Error searching {collection} collection: {str(e)}")
+                    continue
+            
+            logger.info(f"Total results found: {len(results)}")
+            return {
+                "type": "text",
+                "content": results,
+                "source": "document_search"
+            }
+            
+        except Exception as e:
+            logger.error(f"Error in document search: {str(e)}")
+            return {
+                "type": "text",
+                "content": [],
+                "source": "document_search"
+            }
 
 class TableSearchTool(PDFTool):
     name = "table_search"
