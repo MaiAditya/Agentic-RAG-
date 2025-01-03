@@ -2,8 +2,7 @@ from typing import List, Dict, Any
 import numpy as np
 import logging
 import json
-
-logger = logging.getLogger(__name__)
+from loguru import logger
 
 class HybridRetriever:
     def __init__(self, chroma_client):
