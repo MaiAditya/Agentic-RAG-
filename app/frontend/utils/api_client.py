@@ -14,18 +14,49 @@ class APIClient:
             return {"status": "unhealthy"}
     
     def process_pdf(self, file) -> Dict[str, Any]:
-        files = {"file": file}
-        response = requests.post(f"{self.base_url}/process-pdf", files=files)
-        return response.json()
+        try:
+            files = {"file": file}
+            response = requests.post(f"{self.base_url}/process-pdf", files=files)
+            return response.json()
+        except requests.exceptions.JSONDecodeError:
+            return {"status": "error", "detail": "Invalid response from server"}
+        except Exception as e:
+            return {"status": "error", "detail": str(e)}
     
     def query_pdf(self, query: str, filters: Optional[Dict] = None) -> Dict[str, Any]:
-        data = {
-            "query": query,
-            "filters": filters or {}
-        }
-        response = requests.post(f"{self.base_url}/query", json=data)
-        return response.json()
+        try:
+            data = {
+                "query": query,
+                "filters": filters or {}
+            }
+            headers = {"Content-Type": "application/json"}
+            response = requests.post(f"{self.base_url}/query", json=data, headers=headers)
+            
+            if response.status_code != 200:
+                return {
+                    "status": "error",
+                    "detail": f"Server returned status code {response.status_code}"
+                }
+            
+            try:
+                return response.json()
+            except requests.exceptions.JSONDecodeError:
+                return {
+                    "status": "error",
+                    "detail": "Invalid JSON response from server"
+                }
+                
+        except Exception as e:
+            return {
+                "status": "error",
+                "detail": f"Request failed: {str(e)}"
+            }
     
     def get_stats(self) -> Dict[str, Any]:
-        response = requests.get(f"{self.base_url}/stats")
-        return response.json() 
+        try:
+            response = requests.get(f"{self.base_url}/stats")
+            return response.json()
+        except requests.exceptions.JSONDecodeError:
+            return {"status": "error", "detail": "Invalid response from server"}
+        except Exception as e:
+            return {"status": "error", "detail": str(e)} 
