@@ -5,8 +5,8 @@ description = "A multimodal PDF analysis pipeline with FastAPI and ChromaDB"
 authors = ["Aditya Gupta <aditya_g@mt.iitr.ac.in>"]
 
 [tool.poetry.dependencies]
+python = ">=3.9,<3.9.7 || >3.9.7,<4.0"
 onnxruntime = "1.19.2"
-python = "^3.9"
 fastapi = "^0.104.0"
 uvicorn = "^0.24.0"
 python-multipart = "^0.0.6"
@@ -32,6 +32,8 @@ loguru = "^0.7.2"
 numpy = "^1.24.0"
 timm = "^0.9.12"
 langchain-community = "^0.0.10"
+streamlit = "^1.41.1"
+requests = "^2.32.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.4.0"
