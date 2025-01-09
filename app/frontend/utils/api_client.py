@@ -3,7 +3,7 @@ import streamlit as st
 from typing import Optional, Dict, Any
 
 class APIClient:
-    def __init__(self, base_url: str = "http://localhost:8000"):
+    def __init__(self, base_url: str = "http://localhost:4223"):
         self.base_url = base_url
     
     def check_health(self) -> Dict[str, Any]:

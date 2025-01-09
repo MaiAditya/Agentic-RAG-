@@ -13,7 +13,7 @@ st.set_page_config(
 )
 
 def main():
-    # Initialize components
+    # Initialize componentst 
     api_client = APIClient()
     predefined_content = PredefinedContent()
     
@@ -26,7 +26,7 @@ def main():
     if health_status.get("status") == "healthy":
         st.sidebar.success("Backend API: Connected")
     else:
-        st.sidebar.error("Backend API: Disconnected")
+        st.sidebar.error("Backend API: Disconnected") 
         st.error("Cannot connect to backend service. Please check if the server is running.")
         return
 
